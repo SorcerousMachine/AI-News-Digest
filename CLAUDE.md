@@ -126,9 +126,11 @@ python3 -c "from scripts.fetch_feeds import hash_url; print(hash_url('THE_URL'))
 - If the hash exists in `seen`: skip the item (already ingested)
 - If the hash does not exist: keep the item as new
 
-If no new items exist from any source after deduplication, create a
-short commit noting "no new items for {date}", push, and exit. Do not
-create a digest post.
+If no new items exist from any source after deduplication, continue
+with Steps 6-9 anyway and publish a minimal digest post whose body
+is a single sentence: "No significant AI developments were surfaced
+in the last 48 hours." Still update seen.json and push. This case
+should be rare but not silent.
 
 ## Step 5: Triage ArXiv Papers
 
@@ -185,17 +187,20 @@ Create the file `content/posts/{YYYY-MM-DD}.md` where the date is today.
 
 The file must begin with Hugo front matter. Use a naive datetime
 (no timezone offset) — Hugo applies the site's timeZone setting
-from hugo.toml, which handles EDT/EST transitions automatically:
+from hugo.toml (UTC). Use noon UTC as the canonical publish time:
 
 ```yaml
 ---
 title: "AI Digest — {Month Day, Year}"
-date: {YYYY-MM-DD}T07:00:00
+date: {YYYY-MM-DD}T12:00:00
 draft: false
 summary: "{first sentence of executive summary, max 200 chars}"
 tags: [{list of category slugs that appear in the digest}]
 ---
 ```
+
+"Today" throughout this document means today in UTC. The filename,
+title, and date should all use the UTC calendar date.
 
 Tag slugs should be lowercase-hyphenated versions of the category names:
 model-releases, developer-tools, research-papers, regulatory-policy,
@@ -204,19 +209,26 @@ funding-business, open-source, infrastructure, other.
 The `summary` is the first sentence of the executive summary, truncated
 to 200 characters if needed.
 
-Follow the front matter with the full digest markdown from Step 7.
+Follow the front matter with the full digest markdown from Step 6.
 
 ## Step 8: Update State
 
 Build an updated seen.json:
 
 1. Start with the existing `seen` entries
-2. Add all new URL hashes from today's items (both included in digest
-   and skipped-as-irrelevant ArXiv papers) with today's date
+2. Add URL hashes with today's date for EVERY item the pipeline
+   processed, regardless of whether it made it into the digest:
+   - All feed items from the Step 2 script output (`feeds` array)
+   - All ArXiv items from the Step 2 script output (`arxiv` array),
+     including those Claude dropped in Step 5 as not relevant
+   - All web items from Step 3 that passed Step 4 dedup, including
+     those Claude chose not to include in the digest
+   The goal: nothing the pipeline has already evaluated should be
+   re-evaluated tomorrow. The 90-day prune (below) is the safety
+   valve — items eventually get re-considered.
 3. Remove any entries with dates older than 90 days from today
 4. Write the result to `state/seen.json`
 
-The 90-day prune keeps the state file from growing unboundedly.
 Format the JSON with 2-space indentation for readable git diffs.
 
 ## Step 9: Commit and Push
@@ -244,9 +256,16 @@ git commit -m "digest: {YYYY-MM-DD}"
 git push origin HEAD:main
 ```
 
-If the push fails (e.g., another process pushed in the meantime), do
-NOT retry. Log the error. The digest file is in the working tree and
-can be recovered from the session.
+If the push fails because the remote has advanced (non-fast-forward),
+rebase onto the latest main and try once more:
+```bash
+git pull --rebase origin main
+git push origin HEAD:main
+```
+
+If the retry also fails, log the error and stop. Do not rebase/push
+more than once — if the second attempt fails, something is wrong
+that automation shouldn't paper over.
 
 ## Step 10: Send Notification
 
