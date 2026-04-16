@@ -1,6 +1,6 @@
 # AI News Digest
 
-Automated daily AI industry digest. A Claude Code Routine clones this repo each morning, runs a Python script to fetch and filter RSS feeds, uses web search for additional coverage, synthesizes a digest post, commits, and pushes. Cloudflare Pages auto-deploys on push.
+Automated daily AI industry digest. A Claude Code Routine clones this repo each morning, runs a Python script to fetch and filter RSS feeds, uses web search for additional coverage, synthesizes a digest post, commits, and pushes. Cloudflare Pages auto-deploys on push. A summary notification goes out via ntfy.sh.
 
 No server. No application code to maintain. The pipeline is a Routine prompt backed by a feed script, repo-committed config, and state.
 
@@ -10,7 +10,7 @@ No server. No application code to maintain. The pipeline is a Routine prompt bac
 Daily scheduled run
   -> Routine clones this repo
   -> Runs scripts/fetch_feeds.py
-     -> Fetches RSS/Atom feeds and ArXiv papers
+     -> Fetches 33 RSS/Atom feeds + 3 ArXiv feeds
      -> Parses XML, normalizes URLs, computes SHA-256 hashes
      -> Filters ArXiv papers by keyword relevance
      -> Deduplicates against state/seen.json
@@ -24,13 +24,20 @@ Daily scheduled run
   -> Prunes state entries older than 90 days
   -> Commits and pushes to main
   -> Cloudflare Pages builds Hugo and deploys
+  -> Sends summary notification to ntfy.sh
 ```
+
+## Subscribe
+
+- **Web:** [sorcerousmachine.com](https://sorcerousmachine.com)
+- **RSS:** [sorcerousmachine.com/feed.xml](https://sorcerousmachine.com/feed.xml)
+- **Notifications:** [ntfy.sh/ai-news-digest](https://ntfy.sh/ai-news-digest)
 
 ## Repository Structure
 
 ```
 scripts/fetch_feeds.py     # Feed fetcher: RSS parsing, dedup, filtering
-config/feeds.yaml          # RSS/Atom feed URLs, ArXiv keywords
+config/feeds.yaml          # 33 RSS/Atom feeds + 3 ArXiv feeds, 7 categories
 state/seen.json            # Dedup state (URL hashes + dates)
 content/posts/             # Generated digest posts (Hugo markdown)
 layouts/                   # Hugo templates
@@ -38,6 +45,20 @@ static/css/style.css       # Site styles
 hugo.toml                  # Hugo configuration
 CLAUDE.md                  # Detailed pipeline instructions for the Routine
 ```
+
+## Feed Sources
+
+33 feeds across 7 categories, plus 3 ArXiv feeds with keyword filtering:
+
+- **Vendor** -- OpenAI, Google DeepMind, Anthropic, Hugging Face
+- **News** -- TechCrunch, Ars Technica, MIT Technology Review, The Register, Hacker News, Lobsters
+- **Newsletters** -- Simon Willison, Nathan Lambert, Jack Clark, Ethan Mollick, Lilian Weng, Sebastian Raschka, Andrej Karpathy, Zvi Mowshowitz, SemiAnalysis, and more
+- **Open Source** -- LangChain, Weights & Biases, PyTorch
+- **Research** -- ArXiv (cs.AI, cs.CL, cs.LG), Google Research, AI Alignment Forum, HF Daily Papers
+- **Regulatory** -- Stanford HAI, NIST
+- **Infrastructure** -- NVIDIA, Semiconductor Engineering, AWS ML
+
+Configured in `config/feeds.yaml`.
 
 ## Architecture Decisions
 
@@ -52,15 +73,12 @@ CLAUDE.md                  # Detailed pipeline instructions for the Routine
 ## Setup
 
 1. Connect this repo to Cloudflare Pages (framework: Hugo, output: `public`, env var `HUGO_VERSION=0.147.0`)
-2. Create a Claude Code Routine pointed at this repo with a daily schedule
-3. Enable unrestricted branch pushes for the Routine
-4. In the Routine's cloud environment, add `pip install feedparser pyyaml` to the setup script
+2. Set build watch paths to `content/**`, `layouts/**`, `static/**`, `hugo.toml`
+3. Create a Claude Code Routine pointed at this repo with a daily schedule
+4. Enable unrestricted branch pushes for the Routine
+5. In the Routine's cloud environment, add `pip install feedparser pyyaml` to the setup script
 
 The Routine reads `CLAUDE.md` on each run for its full instructions.
-
-## Feeds
-
-Feed sources are configured in `config/feeds.yaml`. Categories include vendor blogs, tech news outlets, newsletters, and ArXiv feeds with keyword-based filtering for papers relevant to agentic AI systems.
 
 ## License
 
