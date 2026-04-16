@@ -263,9 +263,16 @@ git pull --rebase origin main
 git push origin HEAD:main
 ```
 
-If the retry also fails, log the error and stop. Do not rebase/push
-more than once — if the second attempt fails, something is wrong
-that automation shouldn't paper over.
+If the retry also fails, fall back to pushing the commit to a
+recovery branch so the digest isn't lost:
+```bash
+git push origin HEAD:recovery/digest-{YYYY-MM-DD}
+```
+
+Log that the main push failed and the recovery branch name.
+Do NOT send the ntfy notification (Step 10) in this case —
+the user will be alerted by noticing the branch and will
+merge it manually.
 
 ## Step 10: Send Notification
 
