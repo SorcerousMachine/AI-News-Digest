@@ -88,7 +88,8 @@ commit message so feed rot is visible.
 ## Step 3: Web Discovery
 
 Use web search to find significant AI industry developments from the last
-24 hours that would not be covered by the RSS feeds. Search for:
+48 hours that would not be covered by the RSS feeds. The 48-hour window
+exists to catch anything yesterday's digest might have missed. Search for:
 
 - New model releases or major updates
 - API changes or developer tools
@@ -182,12 +183,14 @@ Style rules:
 
 Create the file `content/posts/{YYYY-MM-DD}.md` where the date is today.
 
-The file must begin with Hugo front matter:
+The file must begin with Hugo front matter. Use a naive datetime
+(no timezone offset) — Hugo applies the site's timeZone setting
+from hugo.toml, which handles EDT/EST transitions automatically:
 
 ```yaml
 ---
 title: "AI Digest — {Month Day, Year}"
-date: {YYYY-MM-DDT07:00:00-04:00}
+date: {YYYY-MM-DD}T07:00:00
 draft: false
 summary: "{first sentence of executive summary, max 200 chars}"
 tags: [{list of category slugs that appear in the digest}]
@@ -253,13 +256,14 @@ After a successful commit and push, send a summary notification to ntfy.sh:
 curl -s \
   -H "Title: AI Digest — {Month Day, Year}" \
   -H "Tags: newspaper" \
-  -H "Click: https://sorcerousmachine.com/posts/{YYYY-MM-DD}/" \
   -d "{executive summary from the digest}" \
   https://ntfy.sh/ai-news-digest
 ```
 
 The message body should be the 2-3 sentence executive summary from
-Step 6. Plain text only, no markdown.
+Step 6. Plain text only, no markdown. Do NOT include a Click header
+with any URL — the ntfy topic is public and subscribers arrive
+through different channels.
 
 If the push failed in Step 9, do NOT send the notification.
 If the notification fails, log the error but do not retry — this

@@ -2,6 +2,7 @@ baseURL = "https://sorcerousmachine.com"
 languageCode = "en-us"
 title = "AI Digest"
 buildFuture = true
+timeZone = "America/New_York"
 
 [params]
   description = "Daily AI industry digest. Automated collection and analysis."
