@@ -213,11 +213,16 @@ li {
   margin-bottom: 0;
 }
 
-.rss-link {
+.site-links {
   position: absolute;
   top: 50%;
   right: var(--spacing-lg);
   transform: translateY(-50%);
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.header-link {
   font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -229,7 +234,7 @@ li {
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.rss-link:hover {
+.header-link:hover {
   color: var(--accent);
   border-color: var(--accent);
 }
@@ -440,10 +445,9 @@ li {
     font-size: 1.5rem;
   }
 
-  .rss-link {
+  .site-links {
     position: static;
     transform: none;
-    display: inline-block;
     margin-top: var(--spacing-sm);
   }
 

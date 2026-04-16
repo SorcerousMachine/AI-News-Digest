@@ -2,8 +2,11 @@
   <div class="site-header-inner">
     <a href="/" class="site-title">{{ .Site.Title }}</a>
     <p class="site-tagline">{{ .Site.Params.description }}</p>
-    {{ with .OutputFormats.Get "RSS" }}
-    <a href="{{ .Permalink }}" class="rss-link" title="RSS Feed">RSS</a>
-    {{ end }}
+    <nav class="site-links">
+      {{ with .OutputFormats.Get "RSS" }}
+      <a href="{{ .Permalink }}" class="header-link" title="RSS Feed">RSS</a>
+      {{ end }}
+      <a href="https://github.com/SorcerousMachine/ai-news-digest" class="header-link" title="Source on GitHub">GitHub</a>
+    </nav>
   </div>
 </header>
