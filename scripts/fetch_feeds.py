@@ -290,6 +290,7 @@ def main():
         name = feed_cfg["name"]
         url = feed_cfg["url"]
         category = feed_cfg.get("category", "other")
+        source_url = feed_cfg.get("homepage") or url
 
         time.sleep(random.uniform(*INTER_FETCH_JITTER_RANGE))
 
@@ -299,6 +300,7 @@ def main():
             result["errors"].append({
                 "feed": name,
                 "url": url,
+                "source_url": source_url,
                 "type": classify_fetch_error(e),
                 "error": str(e)[:200],
             })
@@ -310,6 +312,7 @@ def main():
             result["errors"].append({
                 "feed": name,
                 "url": url,
+                "source_url": source_url,
                 "type": "parse_error",
                 "error": str(e)[:200],
             })
@@ -352,6 +355,7 @@ def main():
     for url in arxiv_cfg.get("feeds", []):
         feed_name = url.split("/")[-1] if "/" in url else url
         arxiv_source = f"arxiv:{feed_name}"
+        source_url = f"https://arxiv.org/list/{feed_name}/recent"
 
         time.sleep(random.uniform(*INTER_FETCH_JITTER_RANGE))
 
@@ -361,6 +365,7 @@ def main():
             result["errors"].append({
                 "feed": arxiv_source,
                 "url": url,
+                "source_url": source_url,
                 "type": classify_fetch_error(e),
                 "error": str(e)[:200],
             })
@@ -372,6 +377,7 @@ def main():
             result["errors"].append({
                 "feed": arxiv_source,
                 "url": url,
+                "source_url": source_url,
                 "type": "parse_error",
                 "error": str(e)[:200],
             })

@@ -62,7 +62,7 @@ recent items** as a JSON object to stdout:
     }
   ],
   "errors": [
-    {"feed": "...", "url": "...", "type": "status:403", "error": "..."}
+    {"feed": "...", "url": "...", "source_url": "...", "type": "status:403", "error": "..."}
   ],
   "summary": {
     "feeds_attempted": 14,
@@ -186,6 +186,26 @@ Write a daily digest in markdown with this exact structure:
 
 4. **Threads to Watch** (`##` header): 2-3 emerging patterns or threads
    connecting multiple items from today's digest.
+
+5. **Sources Unavailable Today** (`##` header): ONLY include this
+   section if the Step 2 script output `errors` array is non-empty.
+   Omit entirely when there were no fetch errors.
+
+   Precede the list with one sentence: "These sources could not be
+   fetched today. Links point to their homepages so you can check
+   them directly."
+
+   Then one bullet per failed feed, in the order they appear in the
+   `errors` array:
+
+   ```
+   - [{feed name}]({source_url}) — *{type}*
+   ```
+
+   Use the `source_url` field from each error object (already the
+   homepage when available, the RSS URL as fallback). Use the `type`
+   field verbatim (e.g., `status:403`, `timeout`, `parse_error`) so
+   the failure mode is transparent to readers.
 
 Style rules:
 - Direct, analytical tone. No hype, no filler.

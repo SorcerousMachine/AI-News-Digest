@@ -2,140 +2,173 @@
 feeds:
   - name: "OpenAI News"
     url: "https://openai.com/news/rss.xml"
+    homepage: "https://openai.com/news"
     category: "vendor"
 
   - name: "Google DeepMind"
     url: "https://deepmind.google/blog/rss.xml"
+    homepage: "https://deepmind.google/discover/blog"
     category: "vendor"
 
   - name: "Anthropic News (community)"
     url: "https://raw.githubusercontent.com/taobojlen/anthropic-rss-feed/main/anthropic_news_rss.xml"
+    homepage: "https://www.anthropic.com/news"
     category: "vendor"
 
   - name: "Hugging Face Blog"
     url: "https://huggingface.co/blog/feed.xml"
+    homepage: "https://huggingface.co/blog"
     category: "vendor"
 
   # ── News: mainstream tech press ───────────────────────────────
   - name: "TechCrunch AI"
     url: "https://techcrunch.com/category/artificial-intelligence/feed/"
+    homepage: "https://techcrunch.com/category/artificial-intelligence/"
     category: "news"
 
   - name: "Ars Technica AI"
     url: "https://arstechnica.com/ai/feed"
+    homepage: "https://arstechnica.com/ai/"
     category: "news"
 
   - name: "MIT Technology Review"
     url: "https://www.technologyreview.com/feed"
+    homepage: "https://www.technologyreview.com/"
     category: "news"
 
   - name: "The Register AI+ML"
     url: "https://www.theregister.com/software/ai_ml/headlines.atom"
+    homepage: "https://www.theregister.com/software/ai_ml/"
     category: "news"
 
   - name: "Hacker News AI/LLM"
     url: "https://hnrss.org/frontpage?q=AI&points=100"
+    homepage: "https://news.ycombinator.com/"
     category: "news"
 
   - name: "Lobsters AI"
     url: "https://lobste.rs/t/ai.rss"
+    homepage: "https://lobste.rs/t/ai"
     category: "news"
 
   # ── Newsletters: individual voices and analysts ───────────────
   - name: "Simon Willison's Weblog"
     url: "https://simonwillison.net/atom/everything/"
+    homepage: "https://simonwillison.net/"
     category: "newsletter"
 
   - name: "Interconnects (Nathan Lambert)"
     url: "https://www.interconnects.ai/feed"
+    homepage: "https://www.interconnects.ai/"
     category: "newsletter"
 
   - name: "Import AI (Jack Clark)"
     url: "https://jack-clark.net/feed"
+    homepage: "https://jack-clark.net/"
     category: "newsletter"
 
   - name: "One Useful Thing (Ethan Mollick)"
     url: "https://www.oneusefulthing.org/feed"
+    homepage: "https://www.oneusefulthing.org/"
     category: "newsletter"
 
   - name: "Lil'Log (Lilian Weng)"
     url: "https://lilianweng.github.io/index.xml"
+    homepage: "https://lilianweng.github.io/"
     category: "newsletter"
 
   - name: "Ahead of AI (Sebastian Raschka)"
     url: "https://magazine.sebastianraschka.com/feed"
+    homepage: "https://magazine.sebastianraschka.com/"
     category: "newsletter"
 
   - name: "Andrej Karpathy"
     url: "https://karpathy.bearblog.dev/feed/"
+    homepage: "https://karpathy.bearblog.dev/"
     category: "newsletter"
 
   - name: "AI as Normal Technology (Narayanan & Kapoor)"
     url: "https://aisnakeoil.substack.com/feed"
+    homepage: "https://www.aisnakeoil.com/"
     category: "newsletter"
 
   - name: "Don't Worry About the Vase (Zvi Mowshowitz)"
     url: "https://thezvi.substack.com/feed"
+    homepage: "https://thezvi.substack.com/"
     category: "newsletter"
 
   - name: "Last Week in AI"
     url: "https://lastweekin.ai/feed"
+    homepage: "https://lastweekin.ai/"
     category: "newsletter"
 
   - name: "SemiAnalysis"
     url: "https://www.semianalysis.com/feed"
+    homepage: "https://www.semianalysis.com/"
     category: "newsletter"
 
   - name: "The Gradient"
     url: "https://thegradient.pub/rss/"
+    homepage: "https://thegradient.pub/"
     category: "newsletter"
 
   # ── Open Source: developer tools and community ────────────────
   - name: "LangChain Blog"
     url: "https://blog.langchain.dev/rss/"
+    homepage: "https://blog.langchain.dev/"
     category: "open_source"
 
   - name: "Weights & Biases: Fully Connected"
     url: "https://wandb.ai/fully-connected/rss.xml"
+    homepage: "https://wandb.ai/fully-connected"
     category: "open_source"
 
   - name: "PyTorch Blog"
     url: "https://pytorch.org/feed.xml"
+    homepage: "https://pytorch.org/blog/"
     category: "open_source"
 
   # ── Research: papers and technical analysis ───────────────────
   - name: "Google Research Blog"
     url: "https://research.google/blog/rss"
+    homepage: "https://research.google/blog/"
     category: "research"
 
   - name: "AI Alignment Forum"
     url: "https://www.alignmentforum.org/feed.xml"
+    homepage: "https://www.alignmentforum.org/"
     category: "research"
 
   - name: "Hugging Face Daily Papers"
     url: "https://papers.takara.ai/api/feed"
+    homepage: "https://huggingface.co/papers"
     category: "research"
 
   # ── Regulatory: policy and standards ──────────────────────────
   - name: "Stanford HAI"
     url: "https://hai.stanford.edu/rss.xml"
+    homepage: "https://hai.stanford.edu/news"
     category: "regulatory"
 
   - name: "NIST Information Technology"
     url: "https://www.nist.gov/news-events/information%20technology/rss.xml"
+    homepage: "https://www.nist.gov/information-technology"
     category: "regulatory"
 
   # ── Infrastructure: chips, compute, cloud ─────────────────────
   - name: "NVIDIA Blog"
     url: "https://blogs.nvidia.com/feed/"
+    homepage: "https://blogs.nvidia.com/"
     category: "infrastructure"
 
   - name: "Semiconductor Engineering"
     url: "https://semiengineering.com/feed"
+    homepage: "https://semiengineering.com/"
     category: "infrastructure"
 
   - name: "AWS Machine Learning Blog"
     url: "https://aws.amazon.com/blogs/machine-learning/feed/"
+    homepage: "https://aws.amazon.com/blogs/machine-learning/"
     category: "infrastructure"
 
 # ── ArXiv: keyword-filtered research papers ─────────────────────
