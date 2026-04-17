@@ -45,7 +45,8 @@ recent items** as a JSON object to stdout:
       "description": "...",
       "authors": "...",
       "source": "Feed Name",
-      "category": "vendor"
+      "category": "vendor",
+      "thin_description": true
     }
   ],
   "arxiv": [
@@ -77,6 +78,10 @@ recent items** as a JSON object to stdout:
 
 All items in `feeds` and `arxiv` are already deduplicated and recent.
 You do not need to check them against seen.json again.
+
+The `thin_description` flag (feed items only) marks items whose RSS
+description has less than 200 characters of visible text — you will
+need to fetch the article body to analyze them. See Step 6.
 
 Save the full JSON output. You will need it for subsequent steps.
 
@@ -146,6 +151,12 @@ seen.json), assess each paper:
 Drop papers assessed as not relevant.
 
 ## Step 6: Synthesize Daily Digest
+
+Before writing, for every feed item with `thin_description: true`,
+WebFetch the item's URL and read the article body. The RSS teaser
+alone is not enough to write useful analysis. If the fetch fails,
+note the failure and work from the title alone rather than
+fabricating detail. ArXiv items are exempt — abstracts are sufficient.
 
 Write a daily digest in markdown with this exact structure:
 

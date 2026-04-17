@@ -13,6 +13,7 @@ Usage:
 import argparse
 import hashlib
 import json
+import re
 import sys
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
@@ -31,6 +32,15 @@ TRACKING_PARAMS = {
 USER_AGENT = "AIDigest/1.0"
 FETCH_TIMEOUT = 30
 MAX_AGE_HOURS = 48
+THIN_DESCRIPTION_THRESHOLD = 200
+
+
+def visible_text_length(text: str) -> int:
+    """Length of the description after stripping HTML tags and whitespace."""
+    if not text:
+        return 0
+    stripped = re.sub(r"<[^>]+>", "", text)
+    return len(stripped.strip())
 
 
 def parse_published_date(date_str: str) -> datetime | None:
@@ -277,6 +287,8 @@ def main():
             continue
         # Remove internal field before output
         del item["_published_dt"]
+        if visible_text_length(item["description"]) < THIN_DESCRIPTION_THRESHOLD:
+            item["thin_description"] = True
         result["feeds"].append(item)
 
     # Fetch ArXiv feeds with keyword filtering
