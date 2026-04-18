@@ -161,6 +161,17 @@ of why it matters, and a category.
 Do NOT include: routine product updates, opinion pieces, rumors, or
 content older than 48 hours.
 
+**Passive feed discovery.** While reading search results, also note
+any author, newsletter, or publisher whose work you'd cite multiple
+times across recent digests but which is NOT in the active list in
+`config/feeds.yaml`. Record these as **candidate feeds** — name plus
+any RSS/Atom URL you can find on the source page. Do NOT add them to
+the pipeline yourself; surface them in the commit message under a
+"Candidate feeds" line so the user can vet and add them by hand. A
+name only rises to candidacy after it has accumulated signal across
+multiple days of digests; one-off citations do not qualify. Skip this
+when nothing meets the bar — do NOT fabricate candidates.
+
 ## Step 4: Deduplicate Web Discoveries
 
 Feed and ArXiv items from Step 2 are already deduplicated by the script.
