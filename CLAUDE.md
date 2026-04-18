@@ -136,7 +136,7 @@ python3 -c "from scripts.fetch_feeds import hash_url; print(hash_url('THE_URL'))
 - If the hash does not exist: keep the item as new
 
 If no new items exist from any source after deduplication, continue
-with Steps 6-9 anyway and publish a minimal digest post whose body
+with Steps 6-10 anyway and publish a minimal digest post whose body
 is a single sentence: "No significant AI developments were surfaced
 in the last 48 hours." Still update seen.json and push. This case
 should be rare but not silent.
@@ -246,7 +246,54 @@ to 200 characters if needed.
 
 Follow the front matter with the full digest markdown from Step 6.
 
-## Step 8: Update State
+## Step 8: Post-Write Deduplication
+
+This step catches semantic duplicates — the same story surfaced today
+that was already covered in a recent digest under a different URL.
+URL-hash dedup (via `state/seen.json`) cannot catch this because web
+search commonly finds a different article about the same event.
+
+Read the three most recent prior digest posts in `content/posts/`
+(by filename date, excluding today's file). If fewer than three prior
+posts exist, use whatever exists.
+
+For each item in today's digest (any section, any category), ask: is
+this covering the same underlying story — same model release, same
+funding round, same policy action, same research paper, same
+acquisition — as anything in the prior posts? A different article
+about the same story IS a duplicate. A follow-up with genuinely new
+information (e.g., benchmark numbers released a day after a model
+announcement, or a court ruling following a previously-reported
+filing) is NOT a duplicate — keep it and lean the analysis into
+what is actually new.
+
+For each confirmed duplicate:
+- Remove the item (its `###` heading, source attribution, analysis)
+- If the Executive Summary or Threads to Watch references the removed
+  item, rewrite those sections to stay coherent without it
+- If a category section becomes empty after removal, drop the category
+  heading entirely and remove its slug from the `tags:` front matter
+
+After edits, verify the `summary` front matter field still matches
+the first sentence of the (possibly rewritten) Executive Summary.
+Update it if it drifted.
+
+If every item turns out to be a duplicate, replace the body with:
+"No significant new AI developments were surfaced in the last 48
+hours. See the recent archive for ongoing coverage." Still proceed
+to commit and push so the schedule stays consistent.
+
+Overwrite `content/posts/{YYYY-MM-DD}.md` in place with the cleaned
+version. This is the ONE exception to the "never modify existing
+posts" constraint at the bottom of this document — today's file has
+not been committed yet, and the constraint applies to previously-
+published posts.
+
+Do NOT add, reword, or reorder items during this step. The only
+permitted edits are removals plus the coherence-preserving rewrites
+of the executive summary, threads, summary field, and tags.
+
+## Step 9: Update State
 
 Build an updated seen.json:
 
@@ -266,7 +313,7 @@ Build an updated seen.json:
 
 Format the JSON with 2-space indentation for readable git diffs.
 
-## Step 9: Commit and Push
+## Step 10: Commit and Push
 
 IMPORTANT: You MUST commit and push directly to the `main` branch.
 Do NOT create a new branch. Do NOT push to a `claude/` prefixed branch.
@@ -305,11 +352,11 @@ git push origin HEAD:recovery/digest-{YYYY-MM-DD}
 ```
 
 Log that the main push failed and the recovery branch name.
-Do NOT send the ntfy notification (Step 10) in this case —
+Do NOT send the ntfy notification (Step 11) in this case —
 the user will be alerted by noticing the branch and will
 merge it manually.
 
-## Step 10: Send Notification
+## Step 11: Send Notification
 
 After a successful commit and push, send a summary notification to ntfy.sh:
 
@@ -326,14 +373,16 @@ Step 6. Plain text only, no markdown. Do NOT include a Click header
 with any URL — the ntfy topic is public and subscribers arrive
 through different channels.
 
-If the push failed in Step 9, do NOT send the notification.
+If the push failed in Step 10, do NOT send the notification.
 If the notification fails, log the error but do not retry — this
 is informational, not critical.
 
 ## Important Constraints
 
 - Never combine multiple days into one digest. One run = one date.
-- Never modify or overwrite existing digest posts in content/posts/.
+- Never modify or overwrite previously-committed digest posts in
+  content/posts/. Today's in-progress file may be rewritten during
+  Step 8 dedup; all prior posts are immutable.
 - Never delete files from the repository.
 - If a step fails, log the error and continue to subsequent steps where
   possible. The digest should include whatever was successfully collected.
