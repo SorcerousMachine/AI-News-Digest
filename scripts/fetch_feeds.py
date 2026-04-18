@@ -136,7 +136,7 @@ def hash_url(url: str) -> str:
 
 def classify_fetch_error(exc: Exception) -> str:
     """Bucket a fetch/parse exception into a stable category string."""
-    if isinstance(exc, atoma.FeedParseError):
+    if isinstance(exc, (atoma.FeedParseError, atoma.FeedXMLError)):
         return "parse_error"
     if isinstance(exc, HTTPError):
         return f"status:{exc.code}"
@@ -197,7 +197,7 @@ def parse_feed(data: bytes) -> tuple[list[dict], str]:
                 "author": author,
             })
         return items, "rss"
-    except atoma.FeedParseError:
+    except (atoma.FeedParseError, atoma.FeedXMLError):
         pass
 
     feed = atoma.parse_atom_bytes(data)
@@ -308,7 +308,7 @@ def main():
 
         try:
             items, fmt = parse_feed(data)
-        except atoma.FeedParseError as e:
+        except (atoma.FeedParseError, atoma.FeedXMLError) as e:
             result["errors"].append({
                 "feed": name,
                 "url": url,
@@ -373,7 +373,7 @@ def main():
 
         try:
             items, fmt = parse_feed(data)
-        except atoma.FeedParseError as e:
+        except (atoma.FeedParseError, atoma.FeedXMLError) as e:
             result["errors"].append({
                 "feed": arxiv_source,
                 "url": url,
