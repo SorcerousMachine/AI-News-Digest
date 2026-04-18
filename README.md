@@ -19,8 +19,8 @@ Daily cron invocation (11:00 UTC)
      -> Step 1-2: Runs scripts/fetch_feeds.py
         -> Fetches 33 RSS/Atom feeds + 3 ArXiv feeds with per-fetch jitter
         -> Retries once on 5xx/429/timeouts; identifies as a named bot
-        -> Detects stale feed URLs (200 OK + HTML body)
-        -> Classifies errors by type (status:*, timeout, stale_url, parse_error)
+        -> Detects content-mismatch responses (200 OK where body isn't a feed)
+        -> Classifies errors by type (status:*, timeout, content_mismatch, parse_error)
         -> Normalizes URLs, SHA-256 hashes, filters ArXiv by keywords
         -> Deduplicates against state/seen.json
         -> Tracks per-feed consecutive-failure counts in feed_health
@@ -29,7 +29,7 @@ Daily cron invocation (11:00 UTC)
      -> Step 3-4: Web discovery (+ passive feed-candidate capture)
      -> Step 5: Triages ArXiv papers by significance
      -> Step 6-7: Synthesizes digest, writes content/posts/{YYYY-MM-DD}.md
-     -> Step 8: Post-write semantic dedup against last 3 digests
+     -> Step 8: Post-write semantic dedup against last 2 digests
      -> Step 9: Retires feeds past the hard-failure threshold into a
                 disabled: section of config/feeds.yaml
      -> Step 10: Updates state/seen.json (seen hashes + feed_health)
@@ -70,7 +70,8 @@ CLAUDE.md                  # Pipeline instructions loaded by each run
 - **Infrastructure** -- NVIDIA, Semiconductor Engineering, AWS ML
 
 Configured in `config/feeds.yaml`. Feeds that produce two consecutive
-hard failures (404, 410, or HTML-served-where-XML-expected) are moved
+hard failures (404, 410, or content_mismatch — currently detected as
+HTML-served-where-XML-expected) are moved
 to a `disabled:` section of the same file with a reason and date, and
 are skipped on subsequent runs. Manual re-enable by moving the entry
 back into the active list.
@@ -90,16 +91,17 @@ back into the active list.
 - **90-day retention.** Caps state at ~5,000-9,000 entries. Pruned
   each run.
 - **Per-feed health tracking with auto-retirement.** Hard failures
-  (status:404, status:410, stale_url) increment a consecutive-failure
+  (status:404, status:410, content_mismatch) increment a consecutive-failure
   counter; soft failures (5xx, timeouts, parse errors on XML-ish
   bodies) preserve it. Two consecutive hard failures retires the feed
   automatically. Prevents the error log from being dominated by feeds
   that have permanently moved or gone dark.
 - **Post-write semantic deduplication.** URL-hash dedup can't catch
   the same story surfaced from a different URL day-to-day. After the
-  digest is written, Claude reads the last three digests and removes
-  items that cover stories already reported — keeping the synthesis
-  context clean of prior-post bias.
+  digest is written, Claude reads the last two digests — matching the
+  48-hour recency window upstream — and removes items that cover
+  stories already reported, keeping the synthesis context clean of
+  prior-post bias.
 - **Passive feed discovery.** During web search, recurring authors
   and publishers not already in feeds.yaml are surfaced as candidates
   in the commit message for manual review. No auto-addition — web

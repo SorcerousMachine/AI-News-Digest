@@ -81,7 +81,7 @@ recent items** as a JSON object to stdout:
       "homepage": "...",
       "section": "feeds",
       "consecutive_hard_failures": 2,
-      "last_error_type": "stale_url",
+      "last_error_type": "content_mismatch",
       "last_success": "2026-04-10"
     }
   ],
@@ -126,8 +126,9 @@ transient blips run-over-run.
 
 **Feed health tracking.** The script tracks `consecutive_hard_failures`
 per feed across runs. Hard failures are `status:404`, `status:410`,
-and `stale_url` (HTTP 200 where the body is HTML rather than XML —
-indicates the feed URL has been repurposed). Soft failures (5xx,
+and `content_mismatch` (HTTP 200 where the response body does not match
+the expected feed format — today that means an HTML body where XML was
+expected). Soft failures (5xx,
 timeouts, network, parse_error) do not increment the counter. After
 two consecutive hard failures a feed appears in `disable_candidates`;
 Step 9 moves those feeds out of the active list in `config/feeds.yaml`
@@ -240,7 +241,7 @@ Write a daily digest in markdown with this exact structure:
 5. **Sources Unavailable Today** (`##` header): ONLY include this
    section if the Step 2 script output `errors` array contains at
    least one entry whose `type` is a **transient** failure —
-   i.e., NOT in {`status:404`, `status:410`, `stale_url`}. Omit
+   i.e., NOT in {`status:404`, `status:410`, `content_mismatch`}. Omit
    the section entirely if all errors were hard failures (those
    are handled by the Feeds Retired section instead) or if there
    were no errors at all.
@@ -323,8 +324,10 @@ that was already covered in a recent digest under a different URL.
 URL-hash dedup (via `state/seen.json`) cannot catch this because web
 search commonly finds a different article about the same event.
 
-Read the three most recent prior digest posts in `content/posts/`
-(by filename date, excluding today's file). If fewer than three prior
+Read the two most recent prior digest posts in `content/posts/`
+(by filename date, excluding today's file). This matches the 48-hour
+recency window enforced in Steps 2 and 3 — any item duplicate must
+have appeared in one of the two prior days. If fewer than two prior
 posts exist, use whatever exists.
 
 For each item in today's digest (any section, any category), ask: is

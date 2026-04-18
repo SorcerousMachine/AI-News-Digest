@@ -41,7 +41,7 @@ INTER_FETCH_JITTER_RANGE = (0.2, 0.5)
 RETRY_BACKOFF_BASE = 2.0
 RETRY_BACKOFF_JITTER = 1.0
 RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
-HARD_FAILURE_TYPES = frozenset({"status:404", "status:410", "stale_url"})
+HARD_FAILURE_TYPES = frozenset({"status:404", "status:410", "content_mismatch"})
 DISABLE_THRESHOLD = 2
 
 
@@ -56,9 +56,10 @@ def visible_text_length(text: str) -> int:
 def looks_like_feed(data: bytes) -> bool:
     """Heuristic: does this response body look like an XML feed?
 
-    Returns False for clearly-HTML responses (indicates a stale feed URL
-    where the publisher now serves a site page or SPA shell instead).
-    Returns True otherwise — lets the parser decide edge cases.
+    Returns False for clearly-HTML responses (body does not match the
+    expected feed format — typically a publisher that moved to an SPA
+    and left the feed URL serving the site HTML). Returns True otherwise
+    — lets the parser decide edge cases.
     """
     if not data:
         return False
@@ -137,7 +138,7 @@ def update_feed_health(
 
     outcomes: {feed_url: "success" | hard_failure_type | "soft"}
       - "success" resets the consecutive_hard_failures counter.
-      - A hard-failure type (e.g. "status:404", "stale_url") increments it.
+      - A hard-failure type (e.g. "status:404", "content_mismatch") increments it.
       - "soft" leaves the counter unchanged (transient failure — unknown state).
     """
     new_health = {k: dict(v) for k, v in prior.items()}
@@ -387,10 +388,10 @@ def main():
                 "feed": name,
                 "url": url,
                 "source_url": source_url,
-                "type": "stale_url",
-                "error": "Response body is HTML, not RSS/Atom — feed URL appears to be stale",
+                "type": "content_mismatch",
+                "error": "Response body is HTML, not RSS/Atom — content type does not match expected feed format",
             })
-            record_outcome(url, "stale_url")
+            record_outcome(url, "content_mismatch")
             continue
 
         try:
@@ -467,10 +468,10 @@ def main():
                 "feed": arxiv_source,
                 "url": url,
                 "source_url": source_url,
-                "type": "stale_url",
-                "error": "Response body is HTML, not RSS/Atom — feed URL appears to be stale",
+                "type": "content_mismatch",
+                "error": "Response body is HTML, not RSS/Atom — content type does not match expected feed format",
             })
-            record_outcome(url, "stale_url")
+            record_outcome(url, "content_mismatch")
             continue
 
         try:
