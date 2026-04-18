@@ -41,6 +41,8 @@ INTER_FETCH_JITTER_RANGE = (0.2, 0.5)
 RETRY_BACKOFF_BASE = 2.0
 RETRY_BACKOFF_JITTER = 1.0
 RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
+HARD_FAILURE_TYPES = frozenset({"status:404", "status:410", "stale_url"})
+DISABLE_THRESHOLD = 2
 
 
 def visible_text_length(text: str) -> int:
@@ -49,6 +51,21 @@ def visible_text_length(text: str) -> int:
         return 0
     stripped = re.sub(r"<[^>]+>", "", text)
     return len(stripped.strip())
+
+
+def looks_like_feed(data: bytes) -> bool:
+    """Heuristic: does this response body look like an XML feed?
+
+    Returns False for clearly-HTML responses (indicates a stale feed URL
+    where the publisher now serves a site page or SPA shell instead).
+    Returns True otherwise — lets the parser decide edge cases.
+    """
+    if not data:
+        return False
+    head = data.lstrip(b"\xef\xbb\xbf").lstrip()[:256].lower()
+    if head.startswith(b"<!doctype html") or head.startswith(b"<html"):
+        return False
+    return True
 
 
 def parse_published_date(date_str: str) -> datetime | None:
@@ -94,15 +111,61 @@ def is_recent(published: datetime | None, cutoff: datetime) -> bool:
     return published >= cutoff
 
 
-def load_seen(path: Path) -> dict[str, str]:
-    """Load seen.json, returning the 'seen' dict. Empty dict if missing."""
+def load_state(path: Path) -> tuple[dict[str, str], dict]:
+    """Load seen hashes and feed_health from state file. Empty structs if missing."""
     if not path.exists():
-        return {}
+        return {}, {}
     try:
         data = json.loads(path.read_text())
-        return data.get("seen", {})
+        return data.get("seen", {}), data.get("feed_health", {})
     except (json.JSONDecodeError, KeyError):
-        return {}
+        return {}, {}
+
+
+def load_seen(path: Path) -> dict[str, str]:
+    """Legacy shim — some callers import just load_seen."""
+    seen, _ = load_state(path)
+    return seen
+
+
+def update_feed_health(
+    prior: dict,
+    outcomes: dict[str, str],
+    today: str,
+) -> tuple[dict, list[str]]:
+    """Apply today's outcomes to feed_health, return (new_health, urls_to_disable).
+
+    outcomes: {feed_url: "success" | hard_failure_type | "soft"}
+      - "success" resets the consecutive_hard_failures counter.
+      - A hard-failure type (e.g. "status:404", "stale_url") increments it.
+      - "soft" leaves the counter unchanged (transient failure — unknown state).
+    """
+    new_health = {k: dict(v) for k, v in prior.items()}
+    urls_to_disable: list[str] = []
+
+    for url, outcome in outcomes.items():
+        entry = new_health.get(url, {
+            "consecutive_hard_failures": 0,
+            "last_success": None,
+            "last_error_type": None,
+            "last_error_date": None,
+        })
+
+        if outcome == "success":
+            entry["consecutive_hard_failures"] = 0
+            entry["last_success"] = today
+        elif outcome == "soft":
+            pass  # transient — preserve prior counter state
+        else:
+            entry["consecutive_hard_failures"] = entry.get("consecutive_hard_failures", 0) + 1
+            entry["last_error_type"] = outcome
+            entry["last_error_date"] = today
+            if entry["consecutive_hard_failures"] >= DISABLE_THRESHOLD:
+                urls_to_disable.append(url)
+
+        new_health[url] = entry
+
+    return new_health, urls_to_disable
 
 
 def normalize_url(url: str) -> str:
@@ -270,8 +333,9 @@ def main():
     with open(config_path) as f:
         config = yaml.safe_load(f)
 
-    seen = load_seen(Path(args.state))
+    seen, feed_health = load_state(Path(args.state))
     cutoff = datetime.now(timezone.utc) - timedelta(hours=MAX_AGE_HOURS)
+    today_utc = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
     result = {
         "feeds": [],
@@ -284,6 +348,16 @@ def main():
     all_arxiv_items = []
     skipped_seen = 0
     skipped_old = 0
+    feed_outcomes: dict[str, str] = {}
+
+    def record_outcome(url: str, err_type: str | None) -> None:
+        """Map an error type to a health outcome: success / hard-failure / soft."""
+        if err_type is None:
+            feed_outcomes[url] = "success"
+        elif err_type in HARD_FAILURE_TYPES:
+            feed_outcomes[url] = err_type
+        else:
+            feed_outcomes[url] = "soft"
 
     # Fetch regular feeds
     for feed_cfg in config.get("feeds", []):
@@ -297,13 +371,26 @@ def main():
         try:
             data = fetch_bytes(url)
         except (HTTPError, URLError, socket.timeout, TimeoutError, OSError) as e:
+            err_type = classify_fetch_error(e)
             result["errors"].append({
                 "feed": name,
                 "url": url,
                 "source_url": source_url,
-                "type": classify_fetch_error(e),
+                "type": err_type,
                 "error": str(e)[:200],
             })
+            record_outcome(url, err_type)
+            continue
+
+        if not looks_like_feed(data):
+            result["errors"].append({
+                "feed": name,
+                "url": url,
+                "source_url": source_url,
+                "type": "stale_url",
+                "error": "Response body is HTML, not RSS/Atom — feed URL appears to be stale",
+            })
+            record_outcome(url, "stale_url")
             continue
 
         try:
@@ -316,8 +403,10 @@ def main():
                 "type": "parse_error",
                 "error": str(e)[:200],
             })
+            record_outcome(url, "parse_error")
             continue
 
+        record_outcome(url, None)
         for item in items:
             url_hash = hash_url(item["link"])
             published_str = datetime_to_str(item["published"])
@@ -362,13 +451,26 @@ def main():
         try:
             data = fetch_bytes(url)
         except (HTTPError, URLError, socket.timeout, TimeoutError, OSError) as e:
+            err_type = classify_fetch_error(e)
             result["errors"].append({
                 "feed": arxiv_source,
                 "url": url,
                 "source_url": source_url,
-                "type": classify_fetch_error(e),
+                "type": err_type,
                 "error": str(e)[:200],
             })
+            record_outcome(url, err_type)
+            continue
+
+        if not looks_like_feed(data):
+            result["errors"].append({
+                "feed": arxiv_source,
+                "url": url,
+                "source_url": source_url,
+                "type": "stale_url",
+                "error": "Response body is HTML, not RSS/Atom — feed URL appears to be stale",
+            })
+            record_outcome(url, "stale_url")
             continue
 
         try:
@@ -381,8 +483,10 @@ def main():
                 "type": "parse_error",
                 "error": str(e)[:200],
             })
+            record_outcome(url, "parse_error")
             continue
 
+        record_outcome(url, None)
         for item in items:
             title = item["title"]
 
@@ -429,6 +533,40 @@ def main():
         del item["_published_dt"]
         result["arxiv"].append(item)
 
+    # Apply today's outcomes to feed_health and identify disable candidates
+    new_health, urls_to_disable = update_feed_health(feed_health, feed_outcomes, today_utc)
+
+    # Enrich disable_candidates with config metadata so Claude can move entries
+    feed_lookup = {f["url"]: f for f in config.get("feeds", [])}
+    arxiv_urls = set(arxiv_cfg.get("feeds", []))
+    disable_candidates = []
+    for url in urls_to_disable:
+        health = new_health.get(url, {})
+        candidate = {
+            "url": url,
+            "consecutive_hard_failures": health.get("consecutive_hard_failures"),
+            "last_error_type": health.get("last_error_type"),
+            "last_success": health.get("last_success"),
+        }
+        if url in feed_lookup:
+            cfg = feed_lookup[url]
+            candidate["name"] = cfg.get("name", url)
+            candidate["category"] = cfg.get("category", "other")
+            candidate["homepage"] = cfg.get("homepage")
+            candidate["section"] = "feeds"
+        elif url in arxiv_urls:
+            slug = url.rsplit("/", 1)[-1]
+            candidate["name"] = f"arxiv:{slug}"
+            candidate["category"] = "research"
+            candidate["section"] = "arxiv.feeds"
+        else:
+            candidate["name"] = url
+            candidate["section"] = "unknown"
+        disable_candidates.append(candidate)
+
+    result["feed_health_update"] = new_health
+    result["disable_candidates"] = disable_candidates
+
     # Summary counts
     error_types = Counter(e.get("type", "other") for e in result["errors"])
     result["summary"] = {
@@ -440,6 +578,7 @@ def main():
         "skipped_too_old": skipped_old,
         "new_feed_items": len(result["feeds"]),
         "new_arxiv_items": len(result["arxiv"]),
+        "disable_candidates_count": len(disable_candidates),
     }
 
     json.dump(result, sys.stdout, indent=2, ensure_ascii=False)

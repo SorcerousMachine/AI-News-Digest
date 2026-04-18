@@ -8,18 +8,27 @@ exactly, in order. Do not skip steps. Do not fabricate content.
 Read `config/feeds.yaml` for the list of RSS/Atom feeds, ArXiv feed URLs,
 keyword lists, and any other configuration.
 
-Read `state/seen.json` for the set of previously ingested URL hashes.
-This file contains a JSON object:
+Read `state/seen.json` for previously ingested URL hashes and per-feed
+health tracking. The file has this shape:
 ```json
 {
   "seen": {
-    "<sha256-of-normalized-url>": "<YYYY-MM-DD date first seen>",
-    ...
+    "<sha256-of-normalized-url>": "<YYYY-MM-DD date first seen>"
+  },
+  "feed_health": {
+    "<feed-url>": {
+      "consecutive_hard_failures": 0,
+      "last_success": "YYYY-MM-DD",
+      "last_error_type": null,
+      "last_error_date": null
+    }
   }
 }
 ```
 
-If `state/seen.json` does not exist or is empty, treat it as `{"seen": {}}`.
+If `state/seen.json` does not exist or is empty, treat it as
+`{"seen": {}, "feed_health": {}}`. The script manages feed_health
+for you — you only write it back in Step 10.
 
 ## Step 2: Fetch and Parse All Feeds
 
@@ -64,6 +73,26 @@ recent items** as a JSON object to stdout:
   "errors": [
     {"feed": "...", "url": "...", "source_url": "...", "type": "status:403", "error": "..."}
   ],
+  "disable_candidates": [
+    {
+      "url": "...",
+      "name": "...",
+      "category": "...",
+      "homepage": "...",
+      "section": "feeds",
+      "consecutive_hard_failures": 2,
+      "last_error_type": "stale_url",
+      "last_success": "2026-04-10"
+    }
+  ],
+  "feed_health_update": {
+    "<feed-url>": {
+      "consecutive_hard_failures": 0,
+      "last_success": "YYYY-MM-DD",
+      "last_error_type": null,
+      "last_error_date": null
+    }
+  },
   "summary": {
     "feeds_attempted": 14,
     "feeds_failed": 0,
@@ -72,7 +101,8 @@ recent items** as a JSON object to stdout:
     "skipped_already_seen": 1800,
     "skipped_too_old": 300,
     "new_feed_items": 47,
-    "new_arxiv_items": 12
+    "new_arxiv_items": 12,
+    "disable_candidates_count": 0
   }
 }
 ```
@@ -93,6 +123,15 @@ feed rot is visible. Group them by `type` (e.g., `status:403`,
 `timeout`, `parse_error`) using the `error_types` breakdown in
 `summary` — this makes persistent blockers distinguishable from
 transient blips run-over-run.
+
+**Feed health tracking.** The script tracks `consecutive_hard_failures`
+per feed across runs. Hard failures are `status:404`, `status:410`,
+and `stale_url` (HTTP 200 where the body is HTML rather than XML —
+indicates the feed URL has been repurposed). Soft failures (5xx,
+timeouts, network, parse_error) do not increment the counter. After
+two consecutive hard failures a feed appears in `disable_candidates`;
+Step 9 moves those feeds out of the active list in `config/feeds.yaml`
+so tomorrow's run does not waste attempts on them.
 
 ## Step 3: Web Discovery
 
@@ -136,7 +175,7 @@ python3 -c "from scripts.fetch_feeds import hash_url; print(hash_url('THE_URL'))
 - If the hash does not exist: keep the item as new
 
 If no new items exist from any source after deduplication, continue
-with Steps 6-10 anyway and publish a minimal digest post whose body
+with Steps 6-11 anyway and publish a minimal digest post whose body
 is a single sentence: "No significant AI developments were surfaced
 in the last 48 hours." Still update seen.json and push. This case
 should be rare but not silent.
@@ -188,15 +227,19 @@ Write a daily digest in markdown with this exact structure:
    connecting multiple items from today's digest.
 
 5. **Sources Unavailable Today** (`##` header): ONLY include this
-   section if the Step 2 script output `errors` array is non-empty.
-   Omit entirely when there were no fetch errors.
+   section if the Step 2 script output `errors` array contains at
+   least one entry whose `type` is a **transient** failure —
+   i.e., NOT in {`status:404`, `status:410`, `stale_url`}. Omit
+   the section entirely if all errors were hard failures (those
+   are handled by the Feeds Retired section instead) or if there
+   were no errors at all.
 
    Precede the list with one sentence: "These sources could not be
    fetched today. Links point to their homepages so you can check
    them directly."
 
-   Then one bullet per failed feed, in the order they appear in the
-   `errors` array:
+   Then one bullet per **transient** failed feed, in the order they
+   appear in the `errors` array:
 
    ```
    - [{feed name}]({source_url}) — *{type}*
@@ -206,6 +249,22 @@ Write a daily digest in markdown with this exact structure:
    homepage when available, the RSS URL as fallback). Use the `type`
    field verbatim (e.g., `status:403`, `timeout`, `parse_error`) so
    the failure mode is transparent to readers.
+
+6. **Feeds Retired Today** (`##` header): ONLY include this section
+   when the Step 2 output `disable_candidates` array is non-empty.
+   Omit entirely otherwise.
+
+   Precede the list with one sentence: "The following feed URLs
+   were retired today after repeated hard failures. They have been
+   moved out of the active feed list."
+
+   One bullet per entry in `disable_candidates`:
+
+   ```
+   - [{name}]({homepage or url}) — *{last_error_type}* (no successful fetch since {last_success or "first run"})
+   ```
+
+   Prefer `homepage` when present; fall back to `url` otherwise.
 
 Style rules:
 - Direct, analytical tone. No hype, no filler.
@@ -293,10 +352,42 @@ Do NOT add, reword, or reorder items during this step. The only
 permitted edits are removals plus the coherence-preserving rewrites
 of the executive summary, threads, summary field, and tags.
 
-## Step 9: Update State
+## Step 9: Process Feed Retirements
 
-Build an updated seen.json:
+If the Step 2 output `disable_candidates` array is empty, skip this
+step entirely.
 
+Otherwise, move each candidate out of the active feed list in
+`config/feeds.yaml` and into a `disabled:` top-level section. If the
+`disabled:` section does not yet exist, create it after `arxiv:` at
+the bottom of the file.
+
+For each candidate, the disabled entry should have this shape:
+
+```yaml
+disabled:
+  - name: "{candidate.name}"
+    url: "{candidate.url}"
+    homepage: "{candidate.homepage}"   # omit the line if homepage is null
+    category: "{candidate.category}"
+    disabled_on: "{YYYY-MM-DD today}"
+    disabled_reason: "{candidate.last_error_type} ({candidate.consecutive_hard_failures} consecutive hard failures)"
+```
+
+Then REMOVE the candidate's original entry from the `feeds:` list (or
+from `arxiv.feeds:` if `section` is `arxiv.feeds`). Preserve all other
+feed entries, comments, and formatting in `config/feeds.yaml` exactly
+as they were. Use `Edit` (not a full rewrite) to minimize diff noise.
+
+The purpose: tomorrow's run skips these URLs entirely. Re-enabling is
+a manual action — move the entry back from `disabled:` to the active
+list by hand.
+
+## Step 10: Update State
+
+Build an updated `state/seen.json` with two top-level keys:
+
+**`seen`** (URL hash deduplication):
 1. Start with the existing `seen` entries
 2. Add URL hashes with today's date for EVERY item the pipeline
    processed, regardless of whether it made it into the digest:
@@ -309,11 +400,15 @@ Build an updated seen.json:
    re-evaluated tomorrow. The 90-day prune (below) is the safety
    valve — items eventually get re-considered.
 3. Remove any entries with dates older than 90 days from today
-4. Write the result to `state/seen.json`
+
+**`feed_health`** (per-feed failure tracking):
+Use the Step 2 output `feed_health_update` verbatim — the script has
+already applied today's outcomes. Write it under the `feed_health`
+key. Do not modify it.
 
 Format the JSON with 2-space indentation for readable git diffs.
 
-## Step 10: Commit and Push
+## Step 11: Commit and Push
 
 IMPORTANT: You MUST commit and push directly to the `main` branch.
 Do NOT create a new branch. Do NOT push to a `claude/` prefixed branch.
@@ -321,7 +416,7 @@ Cloudflare Pages deploys from `main` — any other branch will not deploy.
 
 Stage all changes:
 ```bash
-git add content/posts/ state/seen.json
+git add content/posts/ state/seen.json config/feeds.yaml
 ```
 
 Check if anything is staged:
@@ -352,11 +447,11 @@ git push origin HEAD:recovery/digest-{YYYY-MM-DD}
 ```
 
 Log that the main push failed and the recovery branch name.
-Do NOT send the ntfy notification (Step 11) in this case —
+Do NOT send the ntfy notification (Step 12) in this case —
 the user will be alerted by noticing the branch and will
 merge it manually.
 
-## Step 11: Send Notification
+## Step 12: Send Notification
 
 After a successful commit and push, send a summary notification to ntfy.sh:
 
@@ -373,7 +468,7 @@ Step 6. Plain text only, no markdown. Do NOT include a Click header
 with any URL — the ntfy topic is public and subscribers arrive
 through different channels.
 
-If the push failed in Step 10, do NOT send the notification.
+If the push failed in Step 11, do NOT send the notification.
 If the notification fails, log the error but do not retry — this
 is informational, not critical.
 
