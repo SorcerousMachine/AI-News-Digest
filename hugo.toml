@@ -1,12 +1,12 @@
 baseURL = "https://sorcerousmachine.com/ai-news-digest"
 languageCode = "en-us"
-title = "AI Digest"
+title = "AI News Digest"
 buildFuture = true
 timeZone = "UTC"
 
 [params]
   description = "Daily AI industry digest. Automated collection and analysis."
-  author = "AI Digest Pipeline"
+  author = "AI News Digest Pipeline"
 
 [markup]
   [markup.goldmark]

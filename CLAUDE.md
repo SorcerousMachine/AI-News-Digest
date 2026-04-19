@@ -1,4 +1,4 @@
-# AI Digest Pipeline
+# AI News Digest Pipeline
 
 You are running a daily AI industry digest pipeline. Follow these steps
 exactly, in order. Do not skip steps. Do not fabricate content.
@@ -297,7 +297,7 @@ from hugo.toml (UTC). Use noon UTC as the canonical publish time:
 
 ```yaml
 ---
-title: "AI Digest — {Month Day, Year}"
+title: "AI News Digest — {Month Day, Year}"
 date: {YYYY-MM-DD}T12:00:00
 draft: false
 summary: "{first sentence of executive summary, max 200 chars}"
@@ -471,7 +471,7 @@ After a successful commit and push, send a summary notification to ntfy.sh:
 
 ```bash
 curl -s \
-  -H "Title: AI Digest — {Month Day, Year}" \
+  -H "Title: AI News Digest — {Month Day, Year}" \
   -H "Tags: newspaper" \
   -d "{executive summary from the digest}" \
   https://ntfy.sh/ai-news-digest
