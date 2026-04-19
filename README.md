@@ -157,7 +157,7 @@ pipeline spec.
 
 ## Build Parameters
 
-A couple of Hugo site params can be set via environment variables at
+A handful of Hugo site params can be set via environment variables at
 build time:
 
 - `HUGO_PARAMS_GITHUBREPO` — if set (e.g. `owner/repo`), renders a
@@ -167,6 +167,12 @@ build time:
   `robots.txt` and a `<meta name="robots" content="noindex, nofollow">`
   tag on every page. Use for builds that should stay out of search
   indexes.
+- `HUGO_PARAMS_BUILTBY` — if set to an organization or individual name
+  (e.g. `Acme Corp`), renders a "Built by {name}." line in the footer.
+  Omit to hide the attribution.
+- `HUGO_PARAMS_BUILTBYURL` — if set alongside `HUGO_PARAMS_BUILTBY`,
+  wraps the name in a link pointing at this URL. Ignored when
+  `HUGO_PARAMS_BUILTBY` is unset.
 
 ## License
 
