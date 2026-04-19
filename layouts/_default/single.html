@@ -13,7 +13,7 @@
     {{ .Content }}
   </div>
   <nav class="digest-nav">
-    <a href="{{ "/" | relURL }}">&larr; All digests</a>
+    <a href="{{ .Site.Home.RelPermalink }}">&larr; All digests</a>
   </nav>
 </article>
 {{ end }}
