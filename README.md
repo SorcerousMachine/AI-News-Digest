@@ -178,6 +178,40 @@ build time:
   JSON-LD `Organization` object. Ignored when `HUGO_PARAMS_BUILTBY` is
   unset.
 
+## Fonts
+
+Instrument Serif (headings) and Source Sans 3 (body) are self-hosted
+from `static/fonts/`. No external font CDN is contacted at runtime —
+the site is fully self-contained.
+
+The `.woff2` files were sourced from the `@fontsource` npm packages:
+
+```
+@fontsource/instrument-serif
+@fontsource/source-sans-3
+```
+
+To regenerate or add a weight:
+
+```bash
+mkdir /tmp/fontsource && cd /tmp/fontsource
+npm init -y && npm install @fontsource/instrument-serif @fontsource/source-sans-3
+# files live under node_modules/@fontsource/<family>/files/
+#   <family>-latin-<weight>-<style>.woff2
+# Copy the ones you need into static/fonts/ with the naming pattern:
+#   <family>-<weight>[-italic].woff2
+```
+
+Then add a matching `@font-face` rule in `static/css/style.css`. Fonts
+referenced in `@font-face` but missing from `static/fonts/` will simply
+fall through to the system-font fallback chain declared in the
+`:root` font variables.
+
+Only the `latin` subset is vendored. Names with extended Latin, Greek,
+or Cyrillic characters fall back to system fonts for those codepoints.
+Add `latin-ext` etc. if you start publishing content that exercises
+them regularly.
+
 ## License
 
 MIT
