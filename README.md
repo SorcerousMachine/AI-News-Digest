@@ -141,10 +141,15 @@ origins.
    invokes:
    ```
    claude -p --permission-mode bypassPermissions \
+     --model 'claude-opus-4-6[1m]' \
      "Run the daily AI digest pipeline per CLAUDE.md. Follow every step in order."
    ```
    Redirect stdout+stderr to a per-day log file so stream interruptions
-   are visible after the fact.
+   are visible after the fact. The model is pinned to Opus 4.6 (1M
+   context variant) because digest synthesis can run into six-figure
+   token counts and Opus 4.7 has documented retrieval degradation past
+   256k tokens. Re-evaluate the pin when a successor model ships with
+   verified long-context behavior.
 6. Add to crontab with `TZ=UTC`:
    ```
    0 11 * * * /path/to/wrapper.sh
