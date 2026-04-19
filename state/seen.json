@@ -37,6 +37,7 @@
     "2c94a723bfeecaa980d7e8bc770516fe625128efeac870486502b5630b52be42": "2026-04-16",
     "2dfca51bbe22866f8bc68ca086f66270e30574c2e5fdf62c39fc1643036b911a": "2026-04-17",
     "2e320eb8917fd93783ed2d3f14ff84da3373369daa72ce4bc2f26a8b185a11d0": "2026-04-17",
+    "2f4d972456a058902cc1906ad2da484af3ba728726cbfd45cb9ad4f8ec757a91": "2026-04-19",
     "302b3e5e67a8b2a0dcae6b513a423a2d00fc7eaf6316ea6c9394c9c91e695472": "2026-04-16",
     "3087b88486768d2cf4a40fb9427ea4c4bf61d580eb81f66ba512161c962d2542": "2026-04-16",
     "327de23752a2d880bcf5e3cd429df4be17835ebcf3f838b1c8ab425a01936763": "2026-04-17",
@@ -81,6 +82,8 @@
     "5d5bb9dcf32533838fe5df9d4b0d0345bbe87716fc4a71ab983ad0cc8bd4aa8c": "2026-04-18",
     "5dba418622bf3b5bc002d01a718a5b3701e9203ee2c864120b7a8e73b01f7db3": "2026-04-16",
     "5e9a9aa0b01fb1953bf92a24f764afa5689197ff920c17211260e046ead74897": "2026-04-17",
+    "5ec6cc35e9b5ecb9e45f8532d88676a8e08a564b9f22b5686bd850b2f67b5da6": "2026-04-19",
+    "63a48b86cfe452f1527d8344c73a953754be319105d75d5e6991c4a9f08326d0": "2026-04-19",
     "63d28a951080fc31679e352845b87e078aa11a263d797acf514050e265ac20a3": "2026-04-16",
     "6415d0cf2b7d11b52f0ea420f3565ef806a7cd920036f19027993882c9a99005": "2026-04-17",
     "645ff40954361f3da23e0670e226d0b4f42e79279b20895b9ebe8cd9ac82c94a": "2026-04-17",
@@ -102,12 +105,14 @@
     "73862d6d679d2c695262ccbf8c3ff9f49c04d46038bdf6dff57d61ab91663b0b": "2026-04-17",
     "738aac07d77572f8019da12da7e80b7f4a41cff7b22da6e4b4732fe563430c6a": "2026-04-18",
     "73c5271c811586b5c3b1aa5ba11381a4226b47739c675b464777be058a191cea": "2026-04-16",
+    "73d6507e408edd31b0ba0f54895809a69bf8aa9ac5364eeba17461ce7fffaf59": "2026-04-19",
     "744b14243416dba6c75480c61dbb8eec317e0c42bff817bb6341eee73b7deb27": "2026-04-17",
     "7524ca91395bcaf91567db0a412bc7013dec95797f0a557351c5dc98b7026cb1": "2026-04-18",
     "769983e06b030f73d23c3f860cd98c3feca093dee669fe5894ba3ec8966ab2f0": "2026-04-16",
     "7b61b778d65d999fc3e9a1fc803d7f50330c0397a1af8db7c7691576ae13f923": "2026-04-16",
     "7b961e53924fda460e7f5fe4ace4119987857a2818b93efb9e047bda8de6de52": "2026-04-17",
     "7eb60785f5f69bc1758f889bcaf2534faec57d1d67dd6251e7eb6fe81e521060": "2026-04-16",
+    "7f9b8302cb05b8eebb69423b8b6b6da0cb0146cd64a76edbe839730af8bebe9c": "2026-04-19",
     "8183fda3e0b9e7546c357c00f67c244d70a3ef3524fae82372cec3c4a1255012": "2026-04-17",
     "8425a1792936aefe71d9e8bc226e48c80e79097063bcc5ec21adc06f337d8c0a": "2026-04-16",
     "87619f096369d3c492dc9da9f394e7e8cce8994cf3b1d7aaee5041c2530da34f": "2026-04-16",
@@ -145,6 +150,7 @@
     "a40b753a2d3f9057ee9739162f9981404e23a4a63b78cfe831803f1af43c344e": "2026-04-16",
     "a46db5ae387408ccebcb5dc17dd42ffd06231bb00e05b4513fbdbbec4a7b0a69": "2026-04-17",
     "a72266f994d3ac703ab1015849742bbca01bac7a4fa83350365825772c8fa140": "2026-04-17",
+    "a819d4c9b638a91b4d9c93dd25b83c9d0a5cdd14dc71cc5c2731a83af804af86": "2026-04-19",
     "a91643453f14c114053603671674d1842c53b8bd296577c5fef31a3a95c178d8": "2026-04-18",
     "ab1b6f3dfe2df7b667e7503e6aec2e3d6a50baff88c2b774024bf42fc1dcf090": "2026-04-17",
     "ad6d657407f1f554e2220cb931dab574d1325598f2a4593fcff1d8b53186c218": "2026-04-18",
@@ -217,6 +223,7 @@
     "f691b11751881bb5a84640d5321770a5539ecb5b329bfa8041f0e94b85a593fa": "2026-04-16",
     "f6ebe1135d7280951d702aafdacb509117de63b9bffe270d6fb22c65c5c10d40": "2026-04-18",
     "f6f9b6de459a5fc2c167f615d0607d33810b7b42b1b560121244cf67296ab052": "2026-04-16",
+    "f709eca999beeaf00fd88540f5d1626f238a1fbbfbfc9bccee101833760450be": "2026-04-19",
     "f72aff1c6e1363c84f700ae3a4598ba636661881d9259411e0d102a92746c76c": "2026-04-18",
     "f8097b76ae8e023dbf3b0e7cb52824d62a77d88d9d33a98cbf684d1f60197288": "2026-04-18",
     "fc11b960fa469e9ee481ef4b410c7b72af5650a6c30e4e4ba3c7a9a25c64d5b8": "2026-04-17",
@@ -228,5 +235,223 @@
     "fe6a9ae0ba2c63dc784474ce1a40778158dc04a170fb4f436694058955822dbf": "2026-04-16",
     "fed3c37885f6e937477120048c0c659960a7985d4bfe6914d3f781cb952f394e": "2026-04-17",
     "ffb834da7755c1c551f32f3175f7e1d6b18cf9d3ce12eff497075af1fc02f2c2": "2026-04-18"
+  },
+  "feed_health": {
+    "https://openai.com/news/rss.xml": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://deepmind.google/blog/rss.xml": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://raw.githubusercontent.com/taobojlen/anthropic-rss-feed/main/anthropic_news_rss.xml": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://huggingface.co/blog/feed.xml": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://techcrunch.com/category/artificial-intelligence/feed/": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://arstechnica.com/ai/feed": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://www.technologyreview.com/feed": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://www.theregister.com/software/ai_ml/headlines.atom": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://hnrss.org/frontpage?q=AI&points=100": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://lobste.rs/t/ai.rss": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://simonwillison.net/atom/everything/": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://www.interconnects.ai/feed": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://jack-clark.net/feed": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://www.oneusefulthing.org/feed": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://lilianweng.github.io/index.xml": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://magazine.sebastianraschka.com/feed": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://karpathy.bearblog.dev/feed/": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://aisnakeoil.substack.com/feed": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://thezvi.substack.com/feed": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://lastweekin.ai/feed": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://www.semianalysis.com/feed": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://thegradient.pub/rss/": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://blog.langchain.dev/rss/": {
+      "consecutive_hard_failures": 1,
+      "last_success": null,
+      "last_error_type": "content_mismatch",
+      "last_error_date": "2026-04-19"
+    },
+    "https://wandb.ai/fully-connected/rss.xml": {
+      "consecutive_hard_failures": 1,
+      "last_success": null,
+      "last_error_type": "content_mismatch",
+      "last_error_date": "2026-04-19"
+    },
+    "https://pytorch.org/feed.xml": {
+      "consecutive_hard_failures": 1,
+      "last_success": null,
+      "last_error_type": "status:404",
+      "last_error_date": "2026-04-19"
+    },
+    "https://research.google/blog/rss": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://www.alignmentforum.org/feed.xml": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://papers.takara.ai/api/feed": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://hai.stanford.edu/rss.xml": {
+      "consecutive_hard_failures": 1,
+      "last_success": null,
+      "last_error_type": "content_mismatch",
+      "last_error_date": "2026-04-19"
+    },
+    "https://www.nist.gov/news-events/information%20technology/rss.xml": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://blogs.nvidia.com/feed/": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://semiengineering.com/feed": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://aws.amazon.com/blogs/machine-learning/feed/": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://rss.arxiv.org/rss/cs.AI": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://rss.arxiv.org/rss/cs.CL": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    },
+    "https://rss.arxiv.org/rss/cs.LG": {
+      "consecutive_hard_failures": 0,
+      "last_success": "2026-04-19",
+      "last_error_type": null,
+      "last_error_date": null
+    }
   }
 }
