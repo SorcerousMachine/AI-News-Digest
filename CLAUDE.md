@@ -207,7 +207,18 @@ Drop papers assessed as not relevant.
 
 ## Step 6: Synthesize Daily Digest
 
-Before writing, for every feed item with `thin_description: true`,
+Before writing, filter feed items for AI relevance. Most configured
+feeds are curated AI-focused sources, but some — notably Hacker News —
+surface their full front page without any AI pre-filter. Drop any feed
+item whose content is not about AI, machine learning, models, or
+AI-adjacent infrastructure, policy, research, or tooling. Include an
+item only if a reader building AI systems would plausibly care about
+it. When in doubt, drop — a thinner digest is better than a noisy one.
+(ArXiv items are already keyword-filtered upstream and triaged in
+Step 5; this paragraph applies to everything in the `feeds` array and
+to web-discovered items from Step 3.)
+
+For every remaining feed item with `thin_description: true`,
 WebFetch the item's URL and read the article body. The RSS teaser
 alone is not enough to write useful analysis. If the fetch fails,
 note the failure and work from the title alone rather than
