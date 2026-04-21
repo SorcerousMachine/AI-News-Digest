@@ -33,7 +33,7 @@ TRACKING_PARAMS = {
     "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
     "ref", "source", "fbclid", "gclid",
 }
-USER_AGENT = "Mozilla/5.0 (compatible; AIDigestBot/1.0; +https://digest.sorcerousmachine.com)"
+USER_AGENT = "Mozilla/5.0 (compatible; AIDigestBot/1.0; +https://sorcerousmachine.com/ai-news-digest)"
 FETCH_TIMEOUT = 30
 MAX_AGE_HOURS = 48
 THIN_DESCRIPTION_THRESHOLD = 200

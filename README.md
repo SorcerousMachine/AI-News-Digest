@@ -40,8 +40,8 @@ Daily cron invocation (11:00 UTC)
 
 ## Subscribe
 
-- **Web:** [digest.sorcerousmachine.com](https://digest.sorcerousmachine.com)
-- **RSS:** [digest.sorcerousmachine.com/feed.xml](https://digest.sorcerousmachine.com/feed.xml)
+- **Web:** [sorcerousmachine.com/ai-news-digest](https://sorcerousmachine.com/ai-news-digest)
+- **RSS:** [sorcerousmachine.com/ai-news-digest/feed.xml](https://sorcerousmachine.com/ai-news-digest/feed.xml)
 - **Notifications:** [ntfy.sh/ai-news-digest](https://ntfy.sh/ai-news-digest)
 
 ## Repository Structure
