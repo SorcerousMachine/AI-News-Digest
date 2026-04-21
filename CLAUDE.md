@@ -93,6 +93,13 @@ recent items** as a JSON object to stdout:
       "last_error_date": null
     }
   },
+  "scrape_targets": [
+    {
+      "name": "LangChain Blog",
+      "homepage": "https://blog.langchain.dev/",
+      "category": "open_source"
+    }
+  ],
   "summary": {
     "feeds_attempted": 14,
     "feeds_failed": 0,
@@ -102,7 +109,9 @@ recent items** as a JSON object to stdout:
     "skipped_too_old": 300,
     "new_feed_items": 47,
     "new_arxiv_items": 12,
-    "disable_candidates_count": 0
+    "disable_candidates_count": 0,
+    "scrape_targets_count": 1,
+    "scrape_enabled": true
   }
 }
 ```
@@ -161,6 +170,24 @@ of why it matters, and a category.
 
 Do NOT include: routine product updates, opinion pieces, rumors, or
 content older than 48 hours.
+
+**Directed scraping of retired-but-reachable sites.** If the Step 2
+output includes a non-empty `scrape_targets` array, iterate each one
+before (or after) the open-ended web searches:
+
+1. WebFetch the target's `homepage` URL.
+2. Identify the most recent published articles on that page — typically
+   a blog index, archive list, or "latest posts" section. Layouts
+   vary; use judgment.
+3. For each of the 2-3 most recent articles, WebFetch the article URL
+   and record title, URL, publish date, and a short summary.
+4. Drop any article published outside the 48-hour recency window.
+
+Items found this way flow into the same Step 4 deduplication and
+Step 6 AI-relevance filter as other web-discovered items. Attribute
+them in the digest using the target's `name`. Skip this sub-step
+entirely when `scrape_targets` is empty or absent (controlled by the
+`DIGEST_SCRAPE_ENABLED` env var at the script layer).
 
 **Passive feed discovery.** While reading search results, also note
 any author, newsletter, or publisher whose work you'd cite multiple
@@ -383,14 +410,22 @@ If the Step 2 output `disable_candidates` array is empty, skip this
 step entirely.
 
 Otherwise, move each candidate out of the active feed list in
-`config/feeds.yaml` and into a `disabled:` top-level section. If the
-`disabled:` section does not yet exist, create it after `arxiv:` at
-the bottom of the file.
+`config/feeds.yaml` and into the appropriate retirement section based
+on its `last_error_type`:
 
-For each candidate, the disabled entry should have this shape:
+- **`content_mismatch`** → move to the `scrape:` section. The feed URL
+  is dead but the publisher's site is still reachable; Step 3 will
+  directed-fetch the homepage to recover coverage.
+- **`status:404`, `status:410`, anything else** → move to the
+  `disabled:` section. The URL is truly gone; no recovery path.
+
+If the target section (`scrape:` or `disabled:`) does not yet exist,
+create it near the bottom of the file (after `arxiv:`).
+
+For each candidate, the retired entry should have this shape:
 
 ```yaml
-disabled:
+# under scrape: OR disabled:, depending on routing above
   - name: "{candidate.name}"
     url: "{candidate.url}"
     homepage: "{candidate.homepage}"   # omit the line if homepage is null
@@ -404,9 +439,12 @@ from `arxiv.feeds:` if `section` is `arxiv.feeds`). Preserve all other
 feed entries, comments, and formatting in `config/feeds.yaml` exactly
 as they were. Use `Edit` (not a full rewrite) to minimize diff noise.
 
-The purpose: tomorrow's run skips these URLs entirely. Re-enabling is
-a manual action — move the entry back from `disabled:` to the active
-list by hand.
+The purpose: tomorrow's run stops fetching these URLs via the RSS
+pipeline. `scrape:` entries remain reachable for Step 3's directed
+scraping (when `DIGEST_SCRAPE_ENABLED` is set). `disabled:` entries
+are skipped entirely. Re-enabling or promoting between sections is a
+manual action — move the entry back from `scrape:`/`disabled:` to the
+active `feeds:` list by hand when the publisher restores their feed.
 
 ## Step 10: Update State
 

@@ -70,11 +70,19 @@ CLAUDE.md                  # Pipeline instructions loaded by each run
 - **Infrastructure** -- NVIDIA, Semiconductor Engineering, AWS ML
 
 Configured in `config/feeds.yaml`. Feeds that produce three consecutive
-hard failures (404, 410, or content_mismatch — currently detected as
-HTML-served-where-XML-expected) are moved
-to a `disabled:` section of the same file with a reason and date, and
-are skipped on subsequent runs. Manual re-enable by moving the entry
-back into the active list.
+hard failures are retired automatically, with routing based on the
+failure type:
+
+- `status:404`, `status:410` → `disabled:` section. Truly dead URLs,
+  skipped on subsequent runs.
+- `content_mismatch` (HTML served where XML was expected) → `scrape:`
+  section. The publisher's homepage is still reachable, so Step 3 of
+  the pipeline directed-fetches that page to recover coverage without
+  going through RSS. Controlled by the `DIGEST_SCRAPE_ENABLED` env var
+  (default on).
+
+Manual re-enable or promotion between sections is a hand edit — move
+the entry back into the active `feeds:` list.
 
 ## Architecture Decisions
 
@@ -159,6 +167,16 @@ origins.
 
 Claude loads `CLAUDE.md` at the start of each run for its full
 pipeline spec.
+
+### Pipeline environment variables
+
+- `DIGEST_SCRAPE_ENABLED` — controls whether the pipeline
+  directed-fetches publisher homepages listed under `scrape:` in
+  `config/feeds.yaml` during Step 3 web discovery. Default is enabled;
+  set to `false` (or `0`, `no`, `off`) on the cron host's wrapper env
+  to disable. When disabled, retired `content_mismatch` sites stop
+  being visited — their coverage drops entirely, but the pipeline
+  runs faster and uses less context.
 
 ## Build Parameters
 

@@ -13,6 +13,7 @@ Usage:
 import argparse
 import hashlib
 import json
+import os
 import random
 import re
 import socket
@@ -43,6 +44,7 @@ RETRY_BACKOFF_JITTER = 1.0
 RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
 HARD_FAILURE_TYPES = frozenset({"status:404", "status:410", "content_mismatch"})
 DISABLE_THRESHOLD = 3
+SCRAPE_ENABLED = os.environ.get("DIGEST_SCRAPE_ENABLED", "true").lower() not in {"false", "0", "no", "off"}
 
 
 def visible_text_length(text: str) -> int:
@@ -568,6 +570,20 @@ def main():
     result["feed_health_update"] = new_health
     result["disable_candidates"] = disable_candidates
 
+    # Emit scrape targets from config (retired-but-reachable publishers),
+    # gated by the DIGEST_SCRAPE_ENABLED env var.
+    scrape_targets = []
+    if SCRAPE_ENABLED:
+        for entry in config.get("scrape", []) or []:
+            target = {
+                "name": entry.get("name"),
+                "homepage": entry.get("homepage"),
+                "category": entry.get("category", "other"),
+            }
+            if target["name"] and target["homepage"]:
+                scrape_targets.append(target)
+    result["scrape_targets"] = scrape_targets
+
     # Summary counts
     error_types = Counter(e.get("type", "other") for e in result["errors"])
     result["summary"] = {
@@ -580,6 +596,8 @@ def main():
         "new_feed_items": len(result["feeds"]),
         "new_arxiv_items": len(result["arxiv"]),
         "disable_candidates_count": len(disable_candidates),
+        "scrape_targets_count": len(scrape_targets),
+        "scrape_enabled": SCRAPE_ENABLED,
     }
 
     json.dump(result, sys.stdout, indent=2, ensure_ascii=False)

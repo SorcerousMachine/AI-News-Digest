@@ -194,8 +194,10 @@ arxiv:
       - "distillation"
       - "quantization"
 
-# ── Disabled: feeds retired after repeated hard failures ───────
-disabled:
+# ── Scrape: reachable-but-not-feed-able sites, visited via WebFetch ───
+# Their RSS feed URL serves HTML (usually an SPA), but the publisher still
+# posts articles at the homepage URL. Gated by DIGEST_SCRAPE_ENABLED env var.
+scrape:
   - name: "LangChain Blog"
     url: "https://blog.langchain.dev/rss/"
     homepage: "https://blog.langchain.dev/"
@@ -210,16 +212,18 @@ disabled:
     disabled_on: "2026-04-21"
     disabled_reason: "content_mismatch (3 consecutive hard failures)"
 
-  - name: "PyTorch Blog"
-    url: "https://pytorch.org/feed.xml"
-    homepage: "https://pytorch.org/blog/"
-    category: "open_source"
-    disabled_on: "2026-04-21"
-    disabled_reason: "status:404 (3 consecutive hard failures)"
-
   - name: "Stanford HAI"
     url: "https://hai.stanford.edu/rss.xml"
     homepage: "https://hai.stanford.edu/news"
     category: "regulatory"
     disabled_on: "2026-04-21"
     disabled_reason: "content_mismatch (3 consecutive hard failures)"
+
+# ── Disabled: feeds fully retired (dead URLs, no recovery path) ───────
+disabled:
+  - name: "PyTorch Blog"
+    url: "https://pytorch.org/feed.xml"
+    homepage: "https://pytorch.org/blog/"
+    category: "open_source"
+    disabled_on: "2026-04-21"
+    disabled_reason: "status:404 (3 consecutive hard failures)"
