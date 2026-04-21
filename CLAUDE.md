@@ -410,14 +410,17 @@ If the Step 2 output `disable_candidates` array is empty, skip this
 step entirely.
 
 Otherwise, move each candidate out of the active feed list in
-`config/feeds.yaml` and into the appropriate retirement section based
-on its `last_error_type`:
+`config/feeds.yaml` and into the appropriate retirement section. Route
+based on whether the candidate has a `homepage` value — NOT based on
+the error type. A failure on the feed URL says nothing about whether
+the publisher's site is alive; only the presence of a homepage does.
 
-- **`content_mismatch`** → move to the `scrape:` section. The feed URL
-  is dead but the publisher's site is still reachable; Step 3 will
-  directed-fetch the homepage to recover coverage.
-- **`status:404`, `status:410`, anything else** → move to the
-  `disabled:` section. The URL is truly gone; no recovery path.
+- **`homepage` is set** → move to the `scrape:` section. The publisher
+  is still reachable at a known URL; Step 3 will directed-fetch that
+  page to recover coverage regardless of what type of error killed
+  the feed URL.
+- **`homepage` is absent or null** → move to the `disabled:` section.
+  No known recovery path.
 
 If the target section (`scrape:` or `disabled:`) does not yet exist,
 create it near the bottom of the file (after `arxiv:`).

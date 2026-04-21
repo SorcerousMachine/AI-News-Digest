@@ -70,16 +70,16 @@ CLAUDE.md                  # Pipeline instructions loaded by each run
 - **Infrastructure** -- NVIDIA, Semiconductor Engineering, AWS ML
 
 Configured in `config/feeds.yaml`. Feeds that produce three consecutive
-hard failures are retired automatically, with routing based on the
-failure type:
+hard failures are retired automatically. Routing is based on whether
+the config entry has a `homepage:` value — a failure on the feed URL
+says nothing about whether the publisher's site is alive, so homepage
+presence is the right signal:
 
-- `status:404`, `status:410` → `disabled:` section. Truly dead URLs,
+- `homepage` set → `scrape:` section. Step 3 of the pipeline directed-
+  fetches the homepage to recover coverage without going through RSS.
+  Controlled by the `DIGEST_SCRAPE_ENABLED` env var (default on).
+- `homepage` absent → `disabled:` section. No known recovery path;
   skipped on subsequent runs.
-- `content_mismatch` (HTML served where XML was expected) → `scrape:`
-  section. The publisher's homepage is still reachable, so Step 3 of
-  the pipeline directed-fetches that page to recover coverage without
-  going through RSS. Controlled by the `DIGEST_SCRAPE_ENABLED` env var
-  (default on).
 
 Manual re-enable or promotion between sections is a hand edit — move
 the entry back into the active `feeds:` list.

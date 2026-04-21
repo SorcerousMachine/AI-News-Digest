@@ -219,11 +219,15 @@ scrape:
     disabled_on: "2026-04-21"
     disabled_reason: "content_mismatch (3 consecutive hard failures)"
 
-# ── Disabled: feeds fully retired (dead URLs, no recovery path) ───────
-disabled:
   - name: "PyTorch Blog"
     url: "https://pytorch.org/feed.xml"
     homepage: "https://pytorch.org/blog/"
     category: "open_source"
     disabled_on: "2026-04-21"
     disabled_reason: "status:404 (3 consecutive hard failures)"
+
+# ── Disabled: feeds fully retired (dead URLs, no homepage recovery) ────
+# Entries here have no known live homepage — the publisher can't be
+# reached via any known URL. Truly dropped from the pipeline.
+# (Currently empty.)
+disabled: []
