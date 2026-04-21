@@ -189,6 +189,29 @@ them in the digest using the target's `name`. Skip this sub-step
 entirely when `scrape_targets` is empty or absent (controlled by the
 `DIGEST_SCRAPE_ENABLED` env var at the script layer).
 
+**Record each scrape target's outcome** — the scrape layer is symmetric
+to the feed-fetch layer for availability reporting and retirement. For
+every target you attempt, classify the result into one of three buckets:
+
+- **`success`** — homepage fetched and article links identified. (Even
+  if no articles fell inside the 48h window, a reachable homepage
+  counts as success.) Resets the target's `consecutive_hard_failures`
+  counter to 0 and updates `last_success` to today.
+- **Transient failure** (timeout, 5xx, 403/anti-bot, network error) —
+  homepage was unreachable this run but might recover. Does NOT
+  increment the counter. Target is added to the "transient scrape
+  failures" list used by Step 6 *Sources Unavailable Today*.
+- **Hard failure** (404, 410, page resolves to a clear error/shell
+  that is not a publisher site, or the homepage is obviously no longer
+  a publishing surface) — increments `consecutive_hard_failures` and
+  records `last_error_type` + `last_error_date = today`. When a
+  target's counter reaches 3, it becomes a retirement candidate
+  handled by Step 9.
+
+Keep a session-local structure mapping each target's homepage URL to
+its outcome classification and (for failures) an error description.
+Steps 6, 9, and 10 all consume it.
+
 **Passive feed discovery.** While reading search results, also note
 any author, newsletter, or publisher whose work you'd cite multiple
 times across recent digests but which is NOT in the active list in
@@ -276,45 +299,70 @@ Write a daily digest in markdown with this exact structure:
 4. **Threads to Watch** (`##` header): 2-3 emerging patterns or threads
    connecting multiple items from today's digest.
 
-5. **Sources Unavailable Today** (`##` header): ONLY include this
-   section if the Step 2 script output `errors` array contains at
-   least one entry whose `type` is a **transient** failure —
-   i.e., NOT in {`status:404`, `status:410`, `content_mismatch`}. Omit
-   the section entirely if all errors were hard failures (those
-   are handled by the Feeds Retired section instead) or if there
-   were no errors at all.
+5. **Sources Unavailable Today** (`##` header): include this section
+   if EITHER of the following has at least one entry:
+   - A Step 2 script output `errors` entry whose `type` is a
+     **transient** failure — i.e., NOT in {`status:404`, `status:410`,
+     `content_mismatch`}. (Hard failures on that side are handled by
+     the Feeds Retired section instead.)
+   - A scrape target from Step 3 that Claude classified as a transient
+     failure.
+
+   Omit the section entirely if neither list has any entries.
 
    Precede the list with one sentence: "These sources could not be
    fetched today. Links point to their homepages so you can check
    them directly."
 
-   Then one bullet per **transient** failed feed, in the order they
-   appear in the `errors` array:
+   Then one bullet per transient failure. For Step 2 feed errors:
 
    ```
    - [{feed name}]({source_url}) — *{type}*
    ```
 
-   Use the `source_url` field from each error object (already the
-   homepage when available, the RSS URL as fallback). Use the `type`
-   field verbatim (e.g., `status:403`, `timeout`, `parse_error`) so
-   the failure mode is transparent to readers.
+   (Use the `source_url` field from the error object and the `type`
+   field verbatim, e.g. `status:403`, `timeout`, `parse_error`.)
 
-6. **Feeds Retired Today** (`##` header): ONLY include this section
-   when the Step 2 output `disable_candidates` array is non-empty.
-   Omit entirely otherwise.
+   For Step 3 scrape-target failures:
 
-   Precede the list with one sentence: "The following feed URLs
-   were retired today after repeated hard failures. They have been
-   moved out of the active feed list."
+   ```
+   - [{target name}]({target homepage}) — *scrape: {short error}*
+   ```
 
-   One bullet per entry in `disable_candidates`:
+   Prefix the error with `scrape:` so readers can tell feed-fetch
+   failures apart from scrape-layer failures.
+
+6. **Feeds Retired Today** (`##` header): include this section when
+   EITHER of the following is non-empty:
+   - The Step 2 output `disable_candidates` array (feed-side
+     retirements driven by the fetch script).
+   - Step 3 scrape targets whose `consecutive_hard_failures` reached
+     the retirement threshold (scrape-side retirements driven by
+     Claude's own homepage fetches).
+
+   Omit entirely if neither is present.
+
+   Precede the list with one sentence: "The following sources were
+   retired today after repeated hard failures. They have been moved
+   out of the active pipeline."
+
+   One bullet per retirement, grouping by source in the order above.
+
+   For feed-side retirements (from `disable_candidates`):
 
    ```
    - [{name}]({homepage or url}) — *{last_error_type}* (no successful fetch since {last_success or "first run"})
    ```
 
-   Prefer `homepage` when present; fall back to `url` otherwise.
+   For scrape-side retirements (from Step 3 tracking):
+
+   ```
+   - [{target name}]({target homepage}) — *scrape: {last_error_type}* (no successful scrape since {last_success or "first run"})
+   ```
+
+   Prefer `homepage` when present; fall back to `url` otherwise. The
+   `scrape:` prefix distinguishes which retirement path the source
+   took.
 
 Style rules:
 - Direct, analytical tone. No hype, no filler.
@@ -404,28 +452,49 @@ Do NOT add, reword, or reorder items during this step. The only
 permitted edits are removals plus the coherence-preserving rewrites
 of the executive summary, threads, summary field, and tags.
 
-## Step 9: Process Feed Retirements
+## Step 9: Process Retirements
 
-If the Step 2 output `disable_candidates` array is empty, skip this
-step entirely.
+This step has TWO input sources, both of which may produce retirements:
 
-Otherwise, move each candidate out of the active feed list in
-`config/feeds.yaml` and into the appropriate retirement section. Route
-based on whether the candidate has a `homepage` value — NOT based on
-the error type. A failure on the feed URL says nothing about whether
-the publisher's site is alive; only the presence of a homepage does.
+- **Feed-side candidates** — the Step 2 output `disable_candidates`
+  array (RSS feeds whose fetches crossed the hard-failure threshold).
+- **Scrape-side candidates** — any scrape target whose
+  `consecutive_hard_failures` reached the retirement threshold during
+  Step 3 this run (tracked in Claude's session-local scrape outcome
+  map from that step).
 
-- **`homepage` is set** → move to the `scrape:` section. The publisher
-  is still reachable at a known URL; Step 3 will directed-fetch that
-  page to recover coverage regardless of what type of error killed
-  the feed URL.
-- **`homepage` is absent or null** → move to the `disabled:` section.
-  No known recovery path.
+If BOTH are empty, skip this step entirely.
+
+### Feed-side routing
+
+For each `disable_candidates` entry, route based on whether the
+candidate has a `homepage` value AND whether that homepage is
+currently reachable. A feed-URL failure says nothing about the
+publisher's site being alive, so homepage presence + liveness is the
+right signal.
+
+- If `homepage` is null or empty → `disabled:` section.
+- Otherwise, probe the homepage once via WebFetch. This probe avoids
+  routing to `scrape:` when the homepage is obviously dead.
+  - Homepage returns a valid page → `scrape:` section.
+  - Homepage fails (404/410, clearly-error response, network error
+    that persists) → `disabled:` section.
+- Record this probe outcome in the Step 10 feed_health write so the
+  scrape-side tracker has a baseline from day one.
+
+### Scrape-side routing
+
+Scrape-target retirements have no ambiguity — the homepage has
+already demonstrated persistent failure across three runs, so they
+always go to `disabled:`. Remove the entry from the `scrape:` section
+and add it to `disabled:`.
+
+### Writing to feeds.yaml
 
 If the target section (`scrape:` or `disabled:`) does not yet exist,
 create it near the bottom of the file (after `arxiv:`).
 
-For each candidate, the retired entry should have this shape:
+For each retirement, the entry should have this shape:
 
 ```yaml
 # under scrape: OR disabled:, depending on routing above
@@ -437,17 +506,25 @@ For each candidate, the retired entry should have this shape:
     disabled_reason: "{candidate.last_error_type} ({candidate.consecutive_hard_failures} consecutive hard failures)"
 ```
 
-Then REMOVE the candidate's original entry from the `feeds:` list (or
-from `arxiv.feeds:` if `section` is `arxiv.feeds`). Preserve all other
-feed entries, comments, and formatting in `config/feeds.yaml` exactly
-as they were. Use `Edit` (not a full rewrite) to minimize diff noise.
+For scrape-side retirements, `url` is the original feed URL the
+target was retired from (carried through from the existing `scrape:`
+entry), and `disabled_reason` should be prefixed with `scrape: ` to
+indicate the retirement path — e.g.,
+`scrape: homepage 404 (3 consecutive hard failures)`.
 
-The purpose: tomorrow's run stops fetching these URLs via the RSS
-pipeline. `scrape:` entries remain reachable for Step 3's directed
-scraping (when `DIGEST_SCRAPE_ENABLED` is set). `disabled:` entries
-are skipped entirely. Re-enabling or promoting between sections is a
-manual action — move the entry back from `scrape:`/`disabled:` to the
-active `feeds:` list by hand when the publisher restores their feed.
+Then REMOVE the candidate's original entry from wherever it lived —
+feed-side from `feeds:` (or `arxiv.feeds:` if `section` is
+`arxiv.feeds`), scrape-side from `scrape:`. Preserve all other
+entries, comments, and formatting in `config/feeds.yaml` exactly as
+they were. Use `Edit` (not a full rewrite) to minimize diff noise.
+
+The purpose: tomorrow's run stops trying these URLs entirely.
+`scrape:` entries remain reachable for Step 3's directed scraping
+(when `DIGEST_SCRAPE_ENABLED` is set). `disabled:` entries are
+skipped by every pipeline layer. Re-enabling or promoting between
+sections is a manual action — move the entry back from
+`scrape:`/`disabled:` to the active `feeds:` list by hand when the
+publisher restores their feed.
 
 ## Step 10: Update State
 
@@ -467,10 +544,28 @@ Build an updated `state/seen.json` with two top-level keys:
    valve — items eventually get re-considered.
 3. Remove any entries with dates older than 90 days from today
 
-**`feed_health`** (per-feed failure tracking):
-Use the Step 2 output `feed_health_update` verbatim — the script has
-already applied today's outcomes. Write it under the `feed_health`
-key. Do not modify it.
+**`feed_health`** (per-URL failure tracking, feed + scrape):
+1. Start from the Step 2 output `feed_health_update` — the script has
+   already applied today's feed-side outcomes.
+2. Merge in Claude's scrape-side outcomes from Step 3 (and the Step 9
+   homepage probe, if one ran). For each scrape target's homepage URL:
+   - `success` today → set `consecutive_hard_failures` to 0,
+     `last_success` to today, clear `last_error_*` fields.
+   - Hard failure today → increment `consecutive_hard_failures`, set
+     `last_error_type` to a `scrape:`-prefixed tag (e.g.
+     `scrape:status:404`, `scrape:empty_page`, `scrape:not_a_publisher`),
+     set `last_error_date` to today.
+   - Transient failure today → preserve the prior entry unchanged.
+3. If a scrape target retired to `disabled:` in Step 9, keep its
+   `feed_health` entry intact (don't delete). The record documents why
+   the retirement happened.
+
+Use the homepage URL as the `feed_health` key for scrape entries,
+matching how the script uses feed URLs as keys. Feed and scrape keys
+coexist in the same object — no collision, since feed URLs and
+homepage URLs are distinct.
+
+Write the merged result under the `feed_health` key.
 
 Format the JSON with 2-space indentation for readable git diffs.
 
