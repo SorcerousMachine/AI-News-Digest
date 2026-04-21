@@ -452,11 +452,27 @@ git diff --cached --quiet
 If nothing is staged, exit cleanly (this happens if all items were
 duplicates and state didn't change).
 
-If changes exist, commit and push directly to main:
+If changes exist, commit and push directly to main. The commit
+message MUST include a `Co-Authored-By` trailer attributing Claude
+Opus 4.6 (1M context). Use a heredoc so the trailer lands as a proper
+message trailer (blank line above it, no leading whitespace):
+
 ```bash
-git commit -m "digest: {YYYY-MM-DD}"
+git commit -m "$(cat <<'EOF'
+digest: {YYYY-MM-DD}
+
+{optional body: feed-error summary grouped by error_types, feed
+retirements, or other run-specific notes}
+
+Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+EOF
+)"
 git push origin HEAD:main
 ```
+
+If the pipeline needs to patch its own code mid-run (e.g., a script
+bug fix), bundle those changes into this digest commit rather than
+creating a separate commit.
 
 If the push fails because the remote has advanced (non-fast-forward),
 rebase onto the latest main and try once more:
