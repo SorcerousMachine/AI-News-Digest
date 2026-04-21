@@ -112,22 +112,6 @@ feeds:
     homepage: "https://thegradient.pub/"
     category: "newsletter"
 
-  # ── Open Source: developer tools and community ────────────────
-  - name: "LangChain Blog"
-    url: "https://blog.langchain.dev/rss/"
-    homepage: "https://blog.langchain.dev/"
-    category: "open_source"
-
-  - name: "Weights & Biases: Fully Connected"
-    url: "https://wandb.ai/fully-connected/rss.xml"
-    homepage: "https://wandb.ai/fully-connected"
-    category: "open_source"
-
-  - name: "PyTorch Blog"
-    url: "https://pytorch.org/feed.xml"
-    homepage: "https://pytorch.org/blog/"
-    category: "open_source"
-
   # ── Research: papers and technical analysis ───────────────────
   - name: "Google Research Blog"
     url: "https://research.google/blog/rss"
@@ -145,11 +129,6 @@ feeds:
     category: "research"
 
   # ── Regulatory: policy and standards ──────────────────────────
-  - name: "Stanford HAI"
-    url: "https://hai.stanford.edu/rss.xml"
-    homepage: "https://hai.stanford.edu/news"
-    category: "regulatory"
-
   - name: "NIST Information Technology"
     url: "https://www.nist.gov/news-events/information%20technology/rss.xml"
     homepage: "https://www.nist.gov/information-technology"
@@ -214,3 +193,33 @@ arxiv:
       - "scaling"
       - "distillation"
       - "quantization"
+
+# ── Disabled: feeds retired after repeated hard failures ───────
+disabled:
+  - name: "LangChain Blog"
+    url: "https://blog.langchain.dev/rss/"
+    homepage: "https://blog.langchain.dev/"
+    category: "open_source"
+    disabled_on: "2026-04-21"
+    disabled_reason: "content_mismatch (3 consecutive hard failures)"
+
+  - name: "Weights & Biases: Fully Connected"
+    url: "https://wandb.ai/fully-connected/rss.xml"
+    homepage: "https://wandb.ai/fully-connected"
+    category: "open_source"
+    disabled_on: "2026-04-21"
+    disabled_reason: "content_mismatch (3 consecutive hard failures)"
+
+  - name: "PyTorch Blog"
+    url: "https://pytorch.org/feed.xml"
+    homepage: "https://pytorch.org/blog/"
+    category: "open_source"
+    disabled_on: "2026-04-21"
+    disabled_reason: "status:404 (3 consecutive hard failures)"
+
+  - name: "Stanford HAI"
+    url: "https://hai.stanford.edu/rss.xml"
+    homepage: "https://hai.stanford.edu/news"
+    category: "regulatory"
+    disabled_on: "2026-04-21"
+    disabled_reason: "content_mismatch (3 consecutive hard failures)"
