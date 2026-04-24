@@ -55,4 +55,5 @@
 {{ end }}
 
 <!-- Styles (includes self-hosted font @font-face rules) -->
-<link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+{{ $style := resources.Get "css/style.css" | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">

@@ -56,7 +56,7 @@ state/seen.json            # Dedup state (URL hashes) + per-feed/scrape health
 state/citation_tracking.json  # Rolling 30-day counts of non-feed source citations
 content/posts/             # Generated digest posts (Hugo markdown)
 layouts/                   # Hugo templates
-static/css/style.css       # Site styles
+assets/css/style.css       # Site styles (fingerprinted at build)
 hugo.toml                  # Hugo configuration
 CLAUDE.md                  # Pipeline instructions loaded by each run
 ```
