@@ -8,32 +8,64 @@
   {{ $citations := (readFile "state/citation_tracking.json" | transform.Unmarshal).citations }}
   {{ $config := readFile "config/feeds.yaml" | transform.Unmarshal }}
 
-  {{ $feedNamesNorm := slice }}
+  {{/* Generic descriptor words that don't distinguish one feed from another.
+       "s" and "t" catch the remnants of possessives ("willison's", "don't")
+       left behind by the non-alphanumeric tokenizer. */}}
+  {{ $stopwords := dict
+      "news" true "blog" true "weblog" true "ai" true "ml" true
+      "feed" true "front" true "page" true "daily" true "papers" true
+      "the" true "a" true "an" true "s" true "t" true }}
+
+  {{/* Build feed match table: (token key, homepage) for each feed + scrape entry. */}}
+  {{ $feedsMatch := slice }}
   {{ range $config.feeds }}
-    {{ $feedNamesNorm = $feedNamesNorm | append (replaceRE `\s*\([^)]*\)\s*$` "" .name | lower | strings.TrimSpace) }}
+    {{ $k := partial "tokenize.html" (dict "name" .name "stopwords" $stopwords) }}
+    {{ if $k }}
+      {{ $feedsMatch = $feedsMatch | append (dict "key" $k "homepage" .homepage) }}
+    {{ end }}
   {{ end }}
   {{ range $config.scrape }}
-    {{ $feedNamesNorm = $feedNamesNorm | append (replaceRE `\s*\([^)]*\)\s*$` "" .name | lower | strings.TrimSpace) }}
+    {{ $k := partial "tokenize.html" (dict "name" .name "stopwords" $stopwords) }}
+    {{ if $k }}
+      {{ $feedsMatch = $feedsMatch | append (dict "key" $k "homepage" .homepage) }}
+    {{ end }}
   {{ end }}
 
   {{ $rss := slice }}
   {{ $web := slice }}
-  {{ range $source, $dates := $citations }}
-    {{ $srcNorm := replaceRE `\s*\([^)]*\)\s*$` "" $source | lower | strings.TrimSpace }}
+  {{ range $source, $data := $citations }}
+    {{ $dates := $data.dates }}
+    {{ $stateOrigin := $data.origin }}
+
+    {{/* Resolve the link URL. Priority:
+         1. arxiv: hardcoded (config has URLs, no name/homepage for arxiv feeds)
+         2. exact token-key match against a feed/scrape entry → that feed's homepage
+         3. fall back to the origin captured from the most recent primary citation
+         Only (1) and (2) count as "RSS"; (3) is the web-discovered link. */}}
+    {{ $url := "" }}
     {{ $isRss := false }}
-    {{ if hasPrefix $srcNorm "arxiv" }}
+    {{ if hasPrefix (lower $source) "arxiv" }}
+      {{ $url = "https://arxiv.org/" }}
       {{ $isRss = true }}
     {{ end }}
     {{ if not $isRss }}
-      {{ range $feedNamesNorm }}
-        {{ if or (strings.Contains . $srcNorm) (strings.Contains $srcNorm .) }}
-          {{ $isRss = true }}
+      {{ $srcKey := partial "tokenize.html" (dict "name" $source "stopwords" $stopwords) }}
+      {{ if $srcKey }}
+        {{ range $feedsMatch }}
+          {{ if and (not $isRss) (eq .key $srcKey) }}
+            {{ $url = .homepage }}
+            {{ $isRss = true }}
+          {{ end }}
         {{ end }}
       {{ end }}
     {{ end }}
+    {{ if not $isRss }}
+      {{ $url = $stateOrigin }}
+    {{ end }}
+
     {{ $sortedDates := sort $dates }}
     {{ $lastDate := index $sortedDates (sub (len $sortedDates) 1) }}
-    {{ $row := dict "name" $source "count" (len $dates) "last" $lastDate }}
+    {{ $row := dict "name" $source "count" (len $dates) "last" $lastDate "homepage" $url }}
     {{ if $isRss }}
       {{ $rss = $rss | append $row }}
     {{ else }}
@@ -41,7 +73,7 @@
     {{ end }}
   {{ end }}
 
-  {{/* Stable sort: name asc, then count desc — ties break by name */}}
+  {{/* Stable sort: name asc first, then count desc — ties break by name */}}
   {{ $rss = sort $rss "name" }}
   {{ $rss = sort $rss "count" "desc" }}
   {{ $web = sort $web "name" }}

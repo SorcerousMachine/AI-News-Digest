@@ -1,0 +1,24 @@
+{{/* Canonicalize a source/feed name into a "|"-joined sorted token key.
+
+     Input: dict with `name` (string) and `stopwords` (map of stopwords → true).
+     - Lowercase.
+     - Strip parenthetical suffix ("Foo (Bar)" → "Foo").
+     - Replace every non-alphanumeric run with a single space, so
+       "Simon Willison's Weblog" tokenizes cleanly (the possessive "s"
+       falls out as a one-character token that lands in the stopword set).
+     - Drop empty tokens and stopwords.
+     - Sort + dedup.
+     - Return the pipe-joined result. Two names with the same key are
+       considered the same source for matching purposes.
+     Empty key means "no distinguishing tokens"; callers should treat
+     that as never-match rather than match-everything. */}}
+{{ $stripped := replaceRE `\s*\([^)]*\)\s*$` "" .name | lower }}
+{{ $flat := replaceRE `[^a-z0-9]+` " " $stripped }}
+{{ $tokens := slice }}
+{{ range split $flat " " }}
+  {{ $t := strings.TrimSpace . }}
+  {{ if and $t (not (index $.stopwords $t)) }}
+    {{ $tokens = $tokens | append $t }}
+  {{ end }}
+{{ end }}
+{{ return (delimit (sort $tokens | uniq) "|") }}

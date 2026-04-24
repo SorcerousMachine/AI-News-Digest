@@ -8,7 +8,8 @@ A 30-day rolling window of every source cited across recent digests, split
 by whether the pipeline tracks them via RSS feed or surfaces them through
 web search and linked coverage.
 
-Classification uses case-insensitive substring matching against
-configured feed names. A citation like "Google" may land in either
-bucket depending on which feed's brand name it happened to partially
-match.
+Classification matches citation names against configured feed names on
+a token basis after stripping generic descriptors like "news" and
+"blog". Web-discovered sources link to the origin of the most recent
+article linking to them; a handful have no link when the source has
+only ever appeared as a secondary attribution.

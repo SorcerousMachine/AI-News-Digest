@@ -595,33 +595,47 @@ File shape:
 ```json
 {
   "citations": {
-    "Source Name": ["2026-04-17", "2026-04-22", "2026-04-24"]
+    "Source Name": {
+      "dates": ["2026-04-17", "2026-04-22", "2026-04-24"],
+      "origin": "https://example.com"
+    }
   }
 }
 ```
 
+The `origin` field holds `scheme://host` of the most recent citation's
+article URL and is what the /sources page uses to link web-discovered
+publishers.
+
 Procedure:
 
 1. Load the file if it exists, otherwise start from `{"citations": {}}`.
-2. For each `###` item in today's digest, parse the source attribution
-   (the `*...*` italic line directly beneath the heading). Split
-   compound attributions on ` / ` so each source is counted
-   independently. Strip parenthetical metadata like `(577 points)`
-   before counting.
-3. For each resulting source name, append today's date to that name's
-   date list (deduplicating — one entry per date per source, even if
-   the same name appears on multiple items the same day).
+   If an existing entry still has the legacy shape (bare date list),
+   migrate it to `{"dates": [...], "origin": ""}` on first encounter.
+2. For each `###` item in today's digest:
+   - Parse the heading's linked URL (the `(URL)` portion of
+     `### [Title](URL)`) and derive the origin as `scheme://host`.
+   - Parse the source attribution (the `*...*` italic line directly
+     beneath the heading). Split compound attributions on ` / ` so
+     each source is counted independently. Strip parenthetical
+     metadata like `(577 points)` before counting.
+3. For each resulting source name:
+   - Ensure `citations[name]` exists with the object shape above.
+   - Append today's date to `dates` (dedup — one entry per date per
+     source, even if the same name appears on multiple items today).
+   - Set `origin` to today's parsed origin. If today's URL was
+     unparseable or missing, preserve the existing `origin`.
 4. Prune any dates older than 30 days from today, per source.
-5. Remove sources whose date list became empty after pruning.
+5. Remove sources whose `dates` became empty after pruning.
 6. Write the file back.
 
 **Identifying candidate feeds.** After the write, compute the
-candidate list: every source whose date list has 3 or more entries AND
-whose name does not match any active `name:` in the `feeds:` section
-of `config/feeds.yaml` (case-insensitive, allowing minor whitespace or
-punctuation variation). This list will be referenced in the Step 11
-commit message. If the list is empty, no commit-message annotation is
-needed.
+candidate list: every source whose `dates` list has 3 or more entries
+AND whose name does not match any active `name:` in the `feeds:`
+section of `config/feeds.yaml` (case-insensitive, allowing minor
+whitespace or punctuation variation). This list will be referenced in
+the Step 11 commit message. If the list is empty, no commit-message
+annotation is needed.
 
 ## Step 11: Commit and Push
 

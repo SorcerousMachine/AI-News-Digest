@@ -6,7 +6,9 @@
   <tbody>
     {{ range . }}
     <tr>
-      <td>{{ .name }}</td>
+      <td>
+        {{ if .homepage }}<a href="{{ .homepage }}">{{ .name }}</a>{{ else }}{{ .name }}{{ end }}
+      </td>
       <td class="num">{{ .count }}</td>
       <td class="num">{{ dateFormat "Jan 2" (time .last) }}</td>
     </tr>

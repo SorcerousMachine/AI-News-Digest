@@ -1,205 +1,352 @@
 {
   "citations": {
-    "AI Alignment Forum": [
-      "2026-04-16",
-      "2026-04-18"
-    ],
-    "AI Made Simple": [
-      "2026-04-19"
-    ],
-    "AI as Normal Technology": [
-      "2026-04-18"
-    ],
-    "AMD": [
-      "2026-04-17"
-    ],
-    "AWS Machine Learning Blog": [
-      "2026-04-21",
-      "2026-04-22"
-    ],
-    "Alibaba": [
-      "2026-04-17"
-    ],
-    "Anthropic": [
-      "2026-04-18",
-      "2026-04-24"
-    ],
-    "Anthropic News": [
-      "2026-04-17"
-    ],
-    "Ars Technica": [
-      "2026-04-18",
-      "2026-04-21",
-      "2026-04-22",
-      "2026-04-23",
-      "2026-04-24"
-    ],
-    "BeyondMachines": [
-      "2026-04-19"
-    ],
-    "Bloomberg": [
-      "2026-04-21",
-      "2026-04-24"
-    ],
-    "Brex": [
-      "2026-04-22"
-    ],
-    "Cloudflare": [
-      "2026-04-18"
-    ],
-    "Don't Worry About the Vase": [
-      "2026-04-16",
-      "2026-04-21",
-      "2026-04-22",
-      "2026-04-23"
-    ],
-    "Financial Times": [
-      "2026-04-21"
-    ],
-    "Google": [
-      "2026-04-24"
-    ],
-    "Google DeepMind": [
-      "2026-04-16"
-    ],
-    "Google Research Blog": [
-      "2026-04-22"
-    ],
-    "Hacker Factor": [
-      "2026-04-23"
-    ],
-    "Hacker News": [
-      "2026-04-21",
-      "2026-04-22",
-      "2026-04-23",
-      "2026-04-24"
-    ],
-    "Hugging Face": [
-      "2026-04-16",
-      "2026-04-18"
-    ],
-    "Hugging Face Blog": [
-      "2026-04-17",
-      "2026-04-22",
-      "2026-04-23"
-    ],
-    "Hugging Face Daily Papers": [
-      "2026-04-21",
-      "2026-04-23",
-      "2026-04-24"
-    ],
-    "IBM Research": [
-      "2026-04-16"
-    ],
-    "IndexBox": [
-      "2026-04-24"
-    ],
-    "Interconnects": [
-      "2026-04-17",
-      "2026-04-21"
-    ],
-    "Lobsters": [
-      "2026-04-16",
-      "2026-04-19",
-      "2026-04-23"
-    ],
-    "MIT Technology Review": [
-      "2026-04-16",
-      "2026-04-20",
-      "2026-04-24"
-    ],
-    "Moonshot AI": [
-      "2026-04-21"
-    ],
-    "NIST": [
-      "2026-04-16"
-    ],
-    "NVIDIA": [
-      "2026-04-18",
-      "2026-04-23"
-    ],
-    "NVIDIA Blog": [
-      "2026-04-16",
-      "2026-04-20",
-      "2026-04-21",
-      "2026-04-24"
-    ],
-    "Nature": [
-      "2026-04-16"
-    ],
-    "OpenAI": [
-      "2026-04-18",
-      "2026-04-22",
-      "2026-04-23",
-      "2026-04-24"
-    ],
-    "OpenClaw": [
-      "2026-04-21"
-    ],
-    "Physical Intelligence": [
-      "2026-04-18"
-    ],
-    "PwC": [
-      "2026-04-16"
-    ],
-    "Qwen": [
-      "2026-04-21",
-      "2026-04-23"
-    ],
-    "Qwen Team": [
-      "2026-04-17"
-    ],
-    "Semiconductor Engineering": [
-      "2026-04-16",
-      "2026-04-21"
-    ],
-    "Simon Willison": [
-      "2026-04-17",
-      "2026-04-19",
-      "2026-04-20",
-      "2026-04-22",
-      "2026-04-23",
-      "2026-04-24"
-    ],
-    "Stanford HAI": [
-      "2026-04-22"
-    ],
-    "TechCrunch": [
-      "2026-04-16",
-      "2026-04-18",
-      "2026-04-19",
-      "2026-04-20",
-      "2026-04-21",
-      "2026-04-22",
-      "2026-04-23",
-      "2026-04-24"
-    ],
-    "The Register": [
-      "2026-04-17",
-      "2026-04-20",
-      "2026-04-21",
-      "2026-04-22",
-      "2026-04-23",
-      "2026-04-24"
-    ],
-    "Zed": [
-      "2026-04-23"
-    ],
-    "arXiv": [
-      "2026-04-17"
-    ],
-    "arXiv:cs.AI": [
-      "2026-04-20",
-      "2026-04-22",
-      "2026-04-24"
-    ],
-    "arXiv:cs.CL": [
-      "2026-04-21",
-      "2026-04-23",
-      "2026-04-24"
-    ],
-    "arXiv:cs.LG": [
-      "2026-04-23"
-    ]
+    "AI Alignment Forum": {
+      "dates": [
+        "2026-04-16",
+        "2026-04-18"
+      ],
+      "origin": "https://www.alignmentforum.org"
+    },
+    "AI Made Simple": {
+      "dates": [
+        "2026-04-19"
+      ],
+      "origin": "https://www.artificialintelligencemadesimple.com"
+    },
+    "AI as Normal Technology": {
+      "dates": [
+        "2026-04-18"
+      ],
+      "origin": "https://www.normaltech.ai"
+    },
+    "AMD": {
+      "dates": [
+        "2026-04-17"
+      ],
+      "origin": "https://www.amd.com"
+    },
+    "AWS Machine Learning Blog": {
+      "dates": [
+        "2026-04-21",
+        "2026-04-22"
+      ],
+      "origin": "https://aws.amazon.com"
+    },
+    "Alibaba": {
+      "dates": [
+        "2026-04-17"
+      ],
+      "origin": "https://huggingface.co"
+    },
+    "Anthropic": {
+      "dates": [
+        "2026-04-18",
+        "2026-04-24"
+      ],
+      "origin": "https://www.anthropic.com"
+    },
+    "Anthropic News": {
+      "dates": [
+        "2026-04-17"
+      ],
+      "origin": "https://www.anthropic.com"
+    },
+    "Ars Technica": {
+      "dates": [
+        "2026-04-18",
+        "2026-04-21",
+        "2026-04-22",
+        "2026-04-23",
+        "2026-04-24"
+      ],
+      "origin": "https://arstechnica.com"
+    },
+    "BeyondMachines": {
+      "dates": [
+        "2026-04-19"
+      ],
+      "origin": "https://beyondmachines.net"
+    },
+    "Bloomberg": {
+      "dates": [
+        "2026-04-21",
+        "2026-04-24"
+      ],
+      "origin": "https://www.bloomberg.com"
+    },
+    "Brex": {
+      "dates": [
+        "2026-04-22"
+      ],
+      "origin": "https://www.brex.com"
+    },
+    "Cloudflare": {
+      "dates": [
+        "2026-04-18"
+      ],
+      "origin": "https://blog.cloudflare.com"
+    },
+    "Don't Worry About the Vase": {
+      "dates": [
+        "2026-04-16",
+        "2026-04-21",
+        "2026-04-22",
+        "2026-04-23"
+      ],
+      "origin": "https://thezvi.substack.com"
+    },
+    "Financial Times": {
+      "dates": [
+        "2026-04-21"
+      ],
+      "origin": ""
+    },
+    "Google": {
+      "dates": [
+        "2026-04-24"
+      ],
+      "origin": "https://developers.googleblog.com"
+    },
+    "Google DeepMind": {
+      "dates": [
+        "2026-04-16"
+      ],
+      "origin": "https://deepmind.google"
+    },
+    "Google Research Blog": {
+      "dates": [
+        "2026-04-22"
+      ],
+      "origin": "https://research.google"
+    },
+    "Hacker Factor": {
+      "dates": [
+        "2026-04-23"
+      ],
+      "origin": "https://hackerfactor.com"
+    },
+    "Hacker News": {
+      "dates": [
+        "2026-04-21",
+        "2026-04-22",
+        "2026-04-23",
+        "2026-04-24"
+      ],
+      "origin": ""
+    },
+    "Hugging Face": {
+      "dates": [
+        "2026-04-16",
+        "2026-04-18"
+      ],
+      "origin": "https://huggingface.co"
+    },
+    "Hugging Face Blog": {
+      "dates": [
+        "2026-04-17",
+        "2026-04-22",
+        "2026-04-23"
+      ],
+      "origin": "https://huggingface.co"
+    },
+    "Hugging Face Daily Papers": {
+      "dates": [
+        "2026-04-21",
+        "2026-04-23",
+        "2026-04-24"
+      ],
+      "origin": "https://arxiv.org"
+    },
+    "IBM Research": {
+      "dates": [
+        "2026-04-16"
+      ],
+      "origin": ""
+    },
+    "IndexBox": {
+      "dates": [
+        "2026-04-24"
+      ],
+      "origin": "https://www.indexbox.io"
+    },
+    "Interconnects": {
+      "dates": [
+        "2026-04-17",
+        "2026-04-21"
+      ],
+      "origin": "https://www.interconnects.ai"
+    },
+    "Lobsters": {
+      "dates": [
+        "2026-04-16",
+        "2026-04-19",
+        "2026-04-23"
+      ],
+      "origin": "https://github.com"
+    },
+    "MIT Technology Review": {
+      "dates": [
+        "2026-04-16",
+        "2026-04-20",
+        "2026-04-24"
+      ],
+      "origin": "https://www.technologyreview.com"
+    },
+    "Moonshot AI": {
+      "dates": [
+        "2026-04-21"
+      ],
+      "origin": "https://www.kimi.com"
+    },
+    "NIST": {
+      "dates": [
+        "2026-04-16"
+      ],
+      "origin": "https://www.nist.gov"
+    },
+    "NVIDIA": {
+      "dates": [
+        "2026-04-18",
+        "2026-04-23"
+      ],
+      "origin": "https://huggingface.co"
+    },
+    "NVIDIA Blog": {
+      "dates": [
+        "2026-04-16",
+        "2026-04-20",
+        "2026-04-21",
+        "2026-04-24"
+      ],
+      "origin": "https://blogs.nvidia.com"
+    },
+    "Nature": {
+      "dates": [
+        "2026-04-16"
+      ],
+      "origin": "https://www.nature.com"
+    },
+    "OpenAI": {
+      "dates": [
+        "2026-04-18",
+        "2026-04-22",
+        "2026-04-23",
+        "2026-04-24"
+      ],
+      "origin": "https://openai.com"
+    },
+    "OpenClaw": {
+      "dates": [
+        "2026-04-21"
+      ],
+      "origin": "https://docs.openclaw.ai"
+    },
+    "Physical Intelligence": {
+      "dates": [
+        "2026-04-18"
+      ],
+      "origin": "https://www.pi.website"
+    },
+    "PwC": {
+      "dates": [
+        "2026-04-16"
+      ],
+      "origin": "https://www.pwc.com"
+    },
+    "Qwen": {
+      "dates": [
+        "2026-04-21",
+        "2026-04-23"
+      ],
+      "origin": "https://qwen.ai"
+    },
+    "Qwen Team": {
+      "dates": [
+        "2026-04-17"
+      ],
+      "origin": ""
+    },
+    "Semiconductor Engineering": {
+      "dates": [
+        "2026-04-16",
+        "2026-04-21"
+      ],
+      "origin": "https://semiengineering.com"
+    },
+    "Simon Willison": {
+      "dates": [
+        "2026-04-17",
+        "2026-04-19",
+        "2026-04-20",
+        "2026-04-22",
+        "2026-04-23",
+        "2026-04-24"
+      ],
+      "origin": "https://simonwillison.net"
+    },
+    "Stanford HAI": {
+      "dates": [
+        "2026-04-22"
+      ],
+      "origin": "https://hai.stanford.edu"
+    },
+    "TechCrunch": {
+      "dates": [
+        "2026-04-16",
+        "2026-04-18",
+        "2026-04-19",
+        "2026-04-20",
+        "2026-04-21",
+        "2026-04-22",
+        "2026-04-23",
+        "2026-04-24"
+      ],
+      "origin": "https://techcrunch.com"
+    },
+    "The Register": {
+      "dates": [
+        "2026-04-17",
+        "2026-04-20",
+        "2026-04-21",
+        "2026-04-22",
+        "2026-04-23",
+        "2026-04-24"
+      ],
+      "origin": "https://www.theregister.com"
+    },
+    "Zed": {
+      "dates": [
+        "2026-04-23"
+      ],
+      "origin": "https://zed.dev"
+    },
+    "arXiv": {
+      "dates": [
+        "2026-04-17"
+      ],
+      "origin": "https://arxiv.org"
+    },
+    "arXiv:cs.AI": {
+      "dates": [
+        "2026-04-20",
+        "2026-04-22",
+        "2026-04-24"
+      ],
+      "origin": "https://arxiv.org"
+    },
+    "arXiv:cs.CL": {
+      "dates": [
+        "2026-04-21",
+        "2026-04-23",
+        "2026-04-24"
+      ],
+      "origin": "https://arxiv.org"
+    },
+    "arXiv:cs.LG": {
+      "dates": [
+        "2026-04-23"
+      ],
+      "origin": "https://arxiv.org"
+    }
   }
 }
