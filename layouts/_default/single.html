@@ -13,7 +13,19 @@
     {{ .Content }}
   </div>
   <nav class="digest-nav">
-    <a href="{{ .Site.Home.RelPermalink }}">&larr; All digests</a>
+    <div class="digest-nav-older">
+      {{ with .PrevInSection }}
+      <a href="{{ .RelPermalink }}" rel="prev">&larr; Older<span class="digest-nav-title">: {{ .Title }}</span></a>
+      {{ end }}
+    </div>
+    <div class="digest-nav-index">
+      <a href="{{ .Site.Home.RelPermalink }}">All digests</a>
+    </div>
+    <div class="digest-nav-newer">
+      {{ with .NextInSection }}
+      <a href="{{ .RelPermalink }}" rel="next">Newer<span class="digest-nav-title">: {{ .Title }}</span> &rarr;</a>
+      {{ end }}
+    </div>
   </nav>
 </article>
 {{ end }}
