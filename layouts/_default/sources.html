@@ -1,0 +1,62 @@
+{{ define "main" }}
+<article class="sources-page">
+  <header class="sources-header">
+    <h1>{{ .Title }}</h1>
+    <div class="sources-lede">{{ .Content }}</div>
+  </header>
+
+  {{ $citations := (readFile "state/citation_tracking.json" | transform.Unmarshal).citations }}
+  {{ $config := readFile "config/feeds.yaml" | transform.Unmarshal }}
+
+  {{ $feedNamesNorm := slice }}
+  {{ range $config.feeds }}
+    {{ $feedNamesNorm = $feedNamesNorm | append (replaceRE `\s*\([^)]*\)\s*$` "" .name | lower | strings.TrimSpace) }}
+  {{ end }}
+  {{ range $config.scrape }}
+    {{ $feedNamesNorm = $feedNamesNorm | append (replaceRE `\s*\([^)]*\)\s*$` "" .name | lower | strings.TrimSpace) }}
+  {{ end }}
+
+  {{ $rss := slice }}
+  {{ $web := slice }}
+  {{ range $source, $dates := $citations }}
+    {{ $srcNorm := replaceRE `\s*\([^)]*\)\s*$` "" $source | lower | strings.TrimSpace }}
+    {{ $isRss := false }}
+    {{ if hasPrefix $srcNorm "arxiv" }}
+      {{ $isRss = true }}
+    {{ end }}
+    {{ if not $isRss }}
+      {{ range $feedNamesNorm }}
+        {{ if or (strings.Contains . $srcNorm) (strings.Contains $srcNorm .) }}
+          {{ $isRss = true }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    {{ $sortedDates := sort $dates }}
+    {{ $lastDate := index $sortedDates (sub (len $sortedDates) 1) }}
+    {{ $row := dict "name" $source "count" (len $dates) "last" $lastDate }}
+    {{ if $isRss }}
+      {{ $rss = $rss | append $row }}
+    {{ else }}
+      {{ $web = $web | append $row }}
+    {{ end }}
+  {{ end }}
+
+  {{/* Stable sort: name asc, then count desc — ties break by name */}}
+  {{ $rss = sort $rss "name" }}
+  {{ $rss = sort $rss "count" "desc" }}
+  {{ $web = sort $web "name" }}
+  {{ $web = sort $web "count" "desc" }}
+
+  <section class="sources-section">
+    <h2>RSS feeds</h2>
+    <p>Sources with an active or retired-but-scraped feed in the pipeline.</p>
+    {{ partial "sources-table.html" $rss }}
+  </section>
+
+  <section class="sources-section">
+    <h2>Web-discovered</h2>
+    <p>Publishers cited in digests without a configured feed. Those crossing three or more citations in the window surface as candidate feeds for manual review.</p>
+    {{ partial "sources-table.html" $web }}
+  </section>
+</article>
+{{ end }}

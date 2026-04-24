@@ -565,6 +565,75 @@ li {
 }
 
 
+/* ---- Sources page ---- */
+
+.sources-page {
+  padding-bottom: var(--spacing-2xl);
+}
+
+.sources-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.sources-header h1 {
+  margin-bottom: var(--spacing-md);
+}
+
+.sources-lede {
+  color: var(--text-muted);
+}
+
+.sources-lede p {
+  margin-bottom: var(--spacing-md);
+}
+
+.sources-section {
+  margin-top: var(--spacing-2xl);
+}
+
+.sources-section > p {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.sources-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--spacing-md);
+}
+
+.sources-table th,
+.sources-table td {
+  text-align: left;
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.sources-table th {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+}
+
+.sources-table td.num,
+.sources-table th:nth-child(2),
+.sources-table th:nth-child(3) {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.sources-empty {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+
 /* ---- Back-to-top ---- */
 
 html {

@@ -1,0 +1,18 @@
+{{ if . }}
+<table class="sources-table">
+  <thead>
+    <tr><th scope="col">Source</th><th scope="col">Citations</th><th scope="col">Last seen</th></tr>
+  </thead>
+  <tbody>
+    {{ range . }}
+    <tr>
+      <td>{{ .name }}</td>
+      <td class="num">{{ .count }}</td>
+      <td class="num">{{ dateFormat "Jan 2" (time .last) }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ else }}
+<p class="sources-empty">No citations yet.</p>
+{{ end }}
