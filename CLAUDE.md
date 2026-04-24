@@ -212,16 +212,11 @@ Keep a session-local structure mapping each target's homepage URL to
 its outcome classification and (for failures) an error description.
 Steps 6, 9, and 10 all consume it.
 
-**Passive feed discovery.** While reading search results, also note
-any author, newsletter, or publisher whose work you'd cite multiple
-times across recent digests but which is NOT in the active list in
-`config/feeds.yaml`. Record these as **candidate feeds** — name plus
-any RSS/Atom URL you can find on the source page. Do NOT add them to
-the pipeline yourself; surface them in the commit message under a
-"Candidate feeds" line so the user can vet and add them by hand. A
-name only rises to candidacy after it has accumulated signal across
-multiple days of digests; one-off citations do not qualify. Skip this
-when nothing meets the bar — do NOT fabricate candidates.
+(Passive feed discovery — tracking which non-feed sources accumulate
+citations across days — is handled in Step 10 via the
+`state/citation_tracking.json` state file. Each run is a fresh session
+and can't remember prior days on its own, so the signal has to be
+written down deterministically.)
 
 ## Step 4: Deduplicate Web Discoveries
 
@@ -283,6 +278,7 @@ Write a daily digest in markdown with this exact structure:
    - Model Releases
    - Developer Tools
    - Research & Papers
+   - Security
    - Regulatory & Policy
    - Funding & Business
    - Open Source
@@ -291,9 +287,26 @@ Write a daily digest in markdown with this exact structure:
 
    OMIT any category with zero items.
 
+   *Security* covers AI-specific vulnerabilities, incidents, breaches,
+   prompt injection findings, model-misuse reports, credential exposure
+   from agentic workflows, and similar safety/security news. Items that
+   would otherwise drift into *Other* because they don't fit the
+   positive-framed categories above belong here when they concern an
+   adversarial or failure mode. Use *Other* only for genuinely
+   miscellaneous items.
+
 3. **Within each category**, items ordered by significance. Each item:
    - `###` title as a markdown link to the source URL
-   - Source attribution in italics
+   - Source attribution in italics — **prefer primary sources** when a
+     story has both primary and aggregator coverage. Link the `###`
+     title to the primary source's URL (a lab announcement, the paper
+     itself, the vendor blog post) rather than to TechCrunch/The
+     Register coverage of it. If multiple sources corroborate the same
+     story, list the primary source FIRST in the italics line, with
+     aggregators after — e.g., `*Anthropic / TechCrunch / The Register*`
+     rather than the other way around. The primary source is the
+     original publisher of the news; aggregators are outlets that
+     report ON that news.
    - 2-3 sentence analysis of why this matters
 
 4. **Threads to Watch** (`##` header): 2-3 emerging patterns or threads
@@ -395,8 +408,8 @@ tags: [{list of category slugs that appear in the digest}]
 title, and date should all use the UTC calendar date.
 
 Tag slugs should be lowercase-hyphenated versions of the category names:
-model-releases, developer-tools, research-papers, regulatory-policy,
-funding-business, open-source, infrastructure, other.
+model-releases, developer-tools, research-papers, security,
+regulatory-policy, funding-business, open-source, infrastructure, other.
 
 The `summary` is the first sentence of the executive summary, truncated
 to 200 characters if needed.
@@ -569,18 +582,79 @@ Write the merged result under the `feed_health` key.
 
 Format the JSON with 2-space indentation for readable git diffs.
 
+### Citation tracking (for passive feed discovery)
+
+Maintain a separate state file `state/citation_tracking.json` that
+records how often non-feed source names appear in source attributions.
+Since each pipeline run is a fresh session with no memory of prior
+runs, this file is the only mechanism that can accumulate multi-day
+signal.
+
+File shape:
+
+```json
+{
+  "citations": {
+    "Source Name": ["2026-04-17", "2026-04-22", "2026-04-24"]
+  }
+}
+```
+
+Procedure:
+
+1. Load the file if it exists, otherwise start from `{"citations": {}}`.
+2. For each `###` item in today's digest, parse the source attribution
+   (the `*...*` italic line directly beneath the heading). Split
+   compound attributions on ` / ` so each source is counted
+   independently. Strip parenthetical metadata like `(577 points)`
+   before counting.
+3. For each resulting source name, append today's date to that name's
+   date list (deduplicating — one entry per date per source, even if
+   the same name appears on multiple items the same day).
+4. Prune any dates older than 30 days from today, per source.
+5. Remove sources whose date list became empty after pruning.
+6. Write the file back.
+
+**Identifying candidate feeds.** After the write, compute the
+candidate list: every source whose date list has 3 or more entries AND
+whose name does not match any active `name:` in the `feeds:` section
+of `config/feeds.yaml` (case-insensitive, allowing minor whitespace or
+punctuation variation). This list will be referenced in the Step 11
+commit message. If the list is empty, no commit-message annotation is
+needed.
+
 ## Step 11: Commit and Push
 
 IMPORTANT: You MUST commit and push directly to the `main` branch.
 Do NOT create a new branch. Do NOT push to a `claude/` prefixed branch.
 Cloudflare Pages deploys from `main` — any other branch will not deploy.
 
-Stage all changes:
+If during this run the pipeline patched its own code (script fix,
+CLAUDE.md correction, template tweak — anything outside `content/posts/`,
+`state/`, or `config/feeds.yaml`), commit those changes FIRST as their
+own separate commit before the digest commit. Use a descriptive
+subject line for the code change and include the `Co-Authored-By`
+trailer. Example:
+
 ```bash
-git add content/posts/ state/seen.json config/feeds.yaml
+git add scripts/ layouts/ CLAUDE.md   # or whatever files changed
+git commit -m "$(cat <<'EOF'
+{short descriptive subject}
+
+{optional body explaining the fix}
+
+Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+EOF
+)"
 ```
 
-Check if anything is staged:
+Then stage and commit the digest content:
+
+```bash
+git add content/posts/ state/seen.json state/citation_tracking.json config/feeds.yaml
+```
+
+Check if anything is staged for the digest:
 ```bash
 git diff --cached --quiet
 ```
@@ -588,27 +662,31 @@ git diff --cached --quiet
 If nothing is staged, exit cleanly (this happens if all items were
 duplicates and state didn't change).
 
-If changes exist, commit and push directly to main. The commit
-message MUST include a `Co-Authored-By` trailer attributing Claude
-Opus 4.6 (1M context). Use a heredoc so the trailer lands as a proper
-message trailer (blank line above it, no leading whitespace):
+If changes exist, commit directly to main. The digest commit message
+MUST include the `Co-Authored-By` trailer. Use a heredoc so the
+trailer lands as a proper message trailer (blank line above it, no
+leading whitespace):
 
 ```bash
 git commit -m "$(cat <<'EOF'
 digest: {YYYY-MM-DD}
 
 {optional body: feed-error summary grouped by error_types, feed
-retirements, or other run-specific notes}
+retirements, or other run-specific notes. If the citation_tracking
+analysis from Step 10 identified candidate feeds, include them here
+as a line like: "Candidate feeds: Name 1, Name 2" — the user will
+review and decide whether to add them to feeds.yaml.}
 
 Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
 EOF
 )"
-git push origin HEAD:main
 ```
 
-If the pipeline needs to patch its own code mid-run (e.g., a script
-bug fix), bundle those changes into this digest commit rather than
-creating a separate commit.
+Push both commits together:
+
+```bash
+git push origin HEAD:main
+```
 
 If the push fails because the remote has advanced (non-fast-forward),
 rebase onto the latest main and try once more:

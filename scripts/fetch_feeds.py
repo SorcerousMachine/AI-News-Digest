@@ -539,6 +539,24 @@ def main():
     # Apply today's outcomes to feed_health and identify disable candidates
     new_health, urls_to_disable = update_feed_health(feed_health, feed_outcomes, today_utc)
 
+    # Prune orphaned feed_health entries — any URL that no longer appears
+    # in the active config (feeds, arxiv, scrape homepages, scrape RSS urls).
+    # Keeps state clean when feed URLs change (e.g., HN filter params).
+    # Homepages from scrape entries stay tracked because Claude writes them
+    # back in Step 10; script-side we preserve them here.
+    active_urls: set[str] = set()
+    for f in config.get("feeds", []) or []:
+        if f.get("url"):
+            active_urls.add(f["url"])
+    for u in config.get("arxiv", {}).get("feeds", []) or []:
+        active_urls.add(u)
+    for s in config.get("scrape", []) or []:
+        if s.get("homepage"):
+            active_urls.add(s["homepage"])
+        if s.get("url"):
+            active_urls.add(s["url"])
+    new_health = {u: h for u, h in new_health.items() if u in active_urls}
+
     # Enrich disable_candidates with config metadata so Claude can move entries
     feed_lookup = {f["url"]: f for f in config.get("feeds", [])}
     arxiv_urls = set(arxiv_cfg.get("feeds", []))
