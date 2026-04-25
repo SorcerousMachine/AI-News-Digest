@@ -395,7 +395,7 @@ li {
 }
 
 .digest-header {
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-lg);
 }
 
 .digest-header time {
