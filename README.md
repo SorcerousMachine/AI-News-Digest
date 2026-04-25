@@ -1,4 +1,4 @@
-# AI News Digest
+# AI News Daily Digest
 
 Automated daily AI industry digest. A cron job on a self-hosted machine
 invokes headless Claude Code each morning: a Python script fetches and

@@ -1,7 +1,7 @@
 ---
 title: "Sources"
 layout: sources
-summary: "Where the AI News Digest draws its coverage — a 30-day rolling window of every cited source."
+summary: "Where the AI News Daily Digest draws its coverage — a 30-day rolling window of every cited source."
 ---
 
 A 30-day rolling window of every source cited across recent digests, split
