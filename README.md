@@ -53,8 +53,9 @@ Daily cron invocation (11:00 UTC)
 scripts/fetch_feeds.py     # Feed fetcher: RSS parsing, dedup, filtering, health tracking
 config/feeds.yaml          # Active feeds + scrape: and disabled: sections for retired entries
 state/seen.json            # Dedup state (URL hashes) + per-feed/scrape health
-state/citation_tracking.json  # Rolling 30-day counts of non-feed source citations
+state/citation_tracking.json  # Per-source citation dates + origin URL (powers /sources)
 content/posts/             # Generated digest posts (Hugo markdown)
+content/sources.md         # /sources transparency page content
 layouts/                   # Hugo templates
 assets/css/style.css       # Site styles (fingerprinted at build)
 hugo.toml                  # Hugo configuration
@@ -117,14 +118,23 @@ the entry back into the active `feeds:` list.
 - **Passive feed discovery via persistent state.** Each pipeline run
   records the source attributions it emitted that day to
   `state/citation_tracking.json`, keyed by source name with a list of
-  citation dates. Dates older than 30 days are pruned. Any source name
-  that accumulates 3+ citations in the rolling window AND isn't already
-  in `feeds.yaml` surfaces as a candidate feed in the commit message
-  for manual review. No auto-addition — web search ranks for traffic,
-  not insight, so the curation stays human. The state file is what
-  makes cross-day signal possible: each cron run is a fresh Claude
+  citation dates and the most recent primary citation's origin URL
+  (`scheme://host`). Dates older than 30 days are pruned. Any source
+  name that accumulates 3+ citations in the rolling window AND isn't
+  already in `feeds.yaml` surfaces as a candidate feed in the commit
+  message for manual review. No auto-addition — web search ranks for
+  traffic, not insight, so the curation stays human. The state file is
+  what makes cross-day signal possible: each cron run is a fresh Claude
   session with no memory of prior days, so the tracking has to be
   written down deterministically.
+- **Sources transparency page.** The same `citation_tracking.json`
+  feeds a `/sources` page listing every cited source from the rolling
+  30-day window, split into an RSS-feeds bucket (matched against
+  `feeds.yaml` via case-insensitive token-set equality after stripping
+  generic descriptors like "news" and "blog") and a web-discovered
+  bucket. Each source links to its homepage — the configured
+  `homepage:` for RSS-backed sources, the captured `origin` for
+  web-discovered ones.
 - **No theme dependency.** Templates are self-contained in `layouts/`.
 - **No JavaScript.** CSS-only. Progressive enhancement only.
 
@@ -139,8 +149,9 @@ schedule will do.
 
 1. Connect this repo to Cloudflare Pages. Framework: Hugo. Output
    directory: `public`. Set `HUGO_VERSION=0.147.0` as a build env var.
-2. Set build watch paths to `content/**`, `layouts/**`, `static/**`,
-   `hugo.toml` — config and state changes shouldn't trigger rebuilds.
+2. Set build watch paths to `content/**`, `layouts/**`, `assets/**`,
+   `static/**`, `hugo.toml` — config and state changes shouldn't
+   trigger rebuilds.
 3. Point a custom domain at the Pages project.
 
 ### Pipeline (cron)
