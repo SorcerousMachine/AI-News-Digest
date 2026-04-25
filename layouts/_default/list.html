@@ -4,10 +4,9 @@
   {{ range $paginator.Pages }}
   <article class="digest-entry">
     <div class="digest-entry-meta">
-      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
       <span class="digest-readtime">{{ .ReadingTime }} min read</span>
     </div>
-    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+    <h2><a href="{{ .RelPermalink }}">{{ .Date.Format "January 2, 2006" }}</a></h2>
     {{ with .Params.summary }}<p class="summary">{{ . }}</p>{{ end }}
     {{ with .Params.tags }}
     <div class="tags">
