@@ -3,7 +3,10 @@
   {{ $paginator := .Paginate (where .Site.RegularPages "Section" "posts").ByDate.Reverse }}
   {{ range $paginator.Pages }}
   <article class="digest-entry">
-    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+    <div class="digest-entry-meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+      <span class="digest-readtime">{{ .ReadingTime }} min read</span>
+    </div>
     <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
     {{ with .Params.summary }}<p class="summary">{{ . }}</p>{{ end }}
     {{ with .Params.tags }}

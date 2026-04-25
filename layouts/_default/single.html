@@ -1,7 +1,10 @@
 {{ define "main" }}
 <article class="digest">
   <header class="digest-header">
-    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+    <div class="digest-header-meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+      <span class="digest-readtime">{{ .ReadingTime }} min read</span>
+    </div>
     <h1>{{ .Title }}</h1>
     {{ with .Params.tags }}
     <div class="tags">
@@ -9,6 +12,12 @@
     </div>
     {{ end }}
   </header>
+  {{ with .TableOfContents }}
+  <aside class="digest-toc">
+    <p class="digest-toc-label">Sections</p>
+    {{ . }}
+  </aside>
+  {{ end }}
   <div class="digest-content">
     {{ .Content }}
   </div>

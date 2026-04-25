@@ -565,6 +565,77 @@ li {
 }
 
 
+/* ---- Digest meta (date + read time) ---- */
+
+.digest-header-meta,
+.digest-entry-meta {
+  margin-bottom: var(--spacing-sm);
+}
+
+.digest-header-meta time,
+.digest-entry-meta time {
+  display: inline;
+  margin: 0;
+}
+
+.digest-readtime {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+.digest-readtime::before {
+  content: " · ";
+}
+
+
+/* ---- Digest table of contents ---- */
+
+.digest-toc {
+  margin: var(--spacing-xl) 0 var(--spacing-2xl);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--bg-surface);
+  border-left: 2px solid var(--accent);
+  border-radius: 2px;
+}
+
+.digest-toc-label {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.digest-toc nav,
+.digest-toc ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.digest-toc li {
+  margin-bottom: var(--spacing-xs);
+}
+
+.digest-toc li:last-child {
+  margin-bottom: 0;
+}
+
+.digest-toc a {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+.digest-toc a:hover {
+  color: var(--accent);
+}
+
+
 /* ---- Sources page ---- */
 
 .sources-page {
