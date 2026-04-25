@@ -12,14 +12,19 @@
     </div>
     {{ end }}
   </header>
-  {{ with .TableOfContents }}
-  <aside class="digest-toc">
-    <p class="digest-toc-label">Sections</p>
-    {{ . }}
-  </aside>
-  {{ end }}
   <div class="digest-content">
-    {{ .Content }}
+    {{/* Inject the TOC between the executive summary and the first ## heading
+         by replacing the first <h2 occurrence with toc + <h2. The exec summary
+         is whatever .Content emits before that first h2 — usually one <p>. */}}
+    {{ $injection := "" }}
+    {{ with .TableOfContents }}
+      {{ $injection = printf `<aside class="digest-toc"><p class="digest-toc-label">Sections</p>%s</aside><h2` . }}
+    {{ end }}
+    {{ if $injection }}
+      {{ replace .Content "<h2" $injection 1 | safeHTML }}
+    {{ else }}
+      {{ .Content }}
+    {{ end }}
   </div>
   <nav class="digest-nav">
     <div class="digest-nav-older">
