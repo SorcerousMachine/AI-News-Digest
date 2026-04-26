@@ -42,7 +42,8 @@
       "dates": [
         "2026-04-18",
         "2026-04-24",
-        "2026-04-25"
+        "2026-04-25",
+        "2026-04-26"
       ],
       "origin": "https://www.anthropic.com"
     },
@@ -73,7 +74,8 @@
       "dates": [
         "2026-04-21",
         "2026-04-24",
-        "2026-04-25"
+        "2026-04-25",
+        "2026-04-26"
       ],
       "origin": "https://www.bloomberg.com"
     },
@@ -83,11 +85,23 @@
       ],
       "origin": "https://www.brex.com"
     },
+    "CNBC": {
+      "dates": [
+        "2026-04-26"
+      ],
+      "origin": "https://techcrunch.com"
+    },
     "Cloudflare": {
       "dates": [
         "2026-04-18"
       ],
       "origin": "https://blog.cloudflare.com"
+    },
+    "Cybersecurity News": {
+      "dates": [
+        "2026-04-26"
+      ],
+      "origin": "https://www.anthropic.com"
     },
     "DeepSeek": {
       "dates": [
@@ -109,6 +123,12 @@
         "2026-04-21"
       ],
       "origin": ""
+    },
+    "Globe and Mail": {
+      "dates": [
+        "2026-04-26"
+      ],
+      "origin": "https://techcrunch.com"
     },
     "Google": {
       "dates": [
@@ -140,9 +160,10 @@
         "2026-04-22",
         "2026-04-23",
         "2026-04-24",
-        "2026-04-25"
+        "2026-04-25",
+        "2026-04-26"
       ],
-      "origin": "https://huggingface.co"
+      "origin": "https://www.scientificamerican.com"
     },
     "Hugging Face": {
       "dates": [
@@ -191,9 +212,10 @@
       "dates": [
         "2026-04-16",
         "2026-04-19",
-        "2026-04-23"
+        "2026-04-23",
+        "2026-04-26"
       ],
-      "origin": "https://github.com"
+      "origin": "https://arxiv.org"
     },
     "MIT Technology Review": {
       "dates": [
@@ -238,6 +260,12 @@
       ],
       "origin": "https://www.nature.com"
     },
+    "NewsBytesApp": {
+      "dates": [
+        "2026-04-26"
+      ],
+      "origin": "https://www.bloomberg.com"
+    },
     "OpenAI": {
       "dates": [
         "2026-04-18",
@@ -279,12 +307,30 @@
       ],
       "origin": ""
     },
+    "Scientific American": {
+      "dates": [
+        "2026-04-26"
+      ],
+      "origin": "https://www.scientificamerican.com"
+    },
     "Semiconductor Engineering": {
       "dates": [
         "2026-04-16",
         "2026-04-21"
       ],
       "origin": "https://semiengineering.com"
+    },
+    "Sifted": {
+      "dates": [
+        "2026-04-26"
+      ],
+      "origin": "https://techcrunch.com"
+    },
+    "SiliconANGLE": {
+      "dates": [
+        "2026-04-26"
+      ],
+      "origin": "https://www.bloomberg.com"
     },
     "Simon Willison": {
       "dates": [
@@ -314,7 +360,8 @@
         "2026-04-22",
         "2026-04-23",
         "2026-04-24",
-        "2026-04-25"
+        "2026-04-25",
+        "2026-04-26"
       ],
       "origin": "https://techcrunch.com"
     },
@@ -338,7 +385,8 @@
     },
     "arXiv": {
       "dates": [
-        "2026-04-17"
+        "2026-04-17",
+        "2026-04-26"
       ],
       "origin": "https://arxiv.org"
     },
