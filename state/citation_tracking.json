@@ -60,9 +60,10 @@
         "2026-04-22",
         "2026-04-23",
         "2026-04-24",
-        "2026-04-25"
+        "2026-04-25",
+        "2026-04-28"
       ],
-      "origin": "https://arstechnica.com"
+      "origin": "https://www.technologyreview.com"
     },
     "BeyondMachines": {
       "dates": [
@@ -75,9 +76,10 @@
         "2026-04-21",
         "2026-04-24",
         "2026-04-25",
-        "2026-04-26"
+        "2026-04-26",
+        "2026-04-28"
       ],
-      "origin": "https://www.bloomberg.com"
+      "origin": "https://openai.com"
     },
     "Brex": {
       "dates": [
@@ -96,6 +98,12 @@
         "2026-04-26"
       ],
       "origin": "https://techcrunch.com"
+    },
+    "CNN": {
+      "dates": [
+        "2026-04-28"
+      ],
+      "origin": "https://www.technologyreview.com"
     },
     "Cloudflare": {
       "dates": [
@@ -120,7 +128,8 @@
         "2026-04-16",
         "2026-04-21",
         "2026-04-22",
-        "2026-04-23"
+        "2026-04-23",
+        "2026-04-28"
       ],
       "origin": "https://thezvi.substack.com"
     },
@@ -129,6 +138,12 @@
         "2026-04-21"
       ],
       "origin": ""
+    },
+    "GitHub": {
+      "dates": [
+        "2026-04-28"
+      ],
+      "origin": "https://github.blog"
     },
     "Globe and Mail": {
       "dates": [
@@ -175,9 +190,10 @@
         "2026-04-24",
         "2026-04-25",
         "2026-04-26",
-        "2026-04-27"
+        "2026-04-27",
+        "2026-04-28"
       ],
-      "origin": "https://arkaung.github.io"
+      "origin": "https://app.oravys.com"
     },
     "Hugging Face": {
       "dates": [
@@ -237,9 +253,10 @@
         "2026-04-16",
         "2026-04-20",
         "2026-04-24",
-        "2026-04-25"
+        "2026-04-25",
+        "2026-04-28"
       ],
-      "origin": "https://huggingface.co"
+      "origin": "https://www.technologyreview.com"
     },
     "Moonshot AI": {
       "dates": [
@@ -288,7 +305,8 @@
         "2026-04-23",
         "2026-04-24",
         "2026-04-25",
-        "2026-04-27"
+        "2026-04-27",
+        "2026-04-28"
       ],
       "origin": "https://openai.com"
     },
@@ -297,6 +315,12 @@
         "2026-04-21"
       ],
       "origin": "https://docs.openclaw.ai"
+    },
+    "Oravys": {
+      "dates": [
+        "2026-04-28"
+      ],
+      "origin": "https://app.oravys.com"
     },
     "Physical Intelligence": {
       "dates": [
@@ -363,9 +387,10 @@
         "2026-04-22",
         "2026-04-23",
         "2026-04-24",
-        "2026-04-25"
+        "2026-04-25",
+        "2026-04-28"
       ],
-      "origin": "https://simonwillison.net"
+      "origin": "https://openai.com"
     },
     "Stanford HAI": {
       "dates": [
@@ -384,7 +409,8 @@
         "2026-04-23",
         "2026-04-24",
         "2026-04-25",
-        "2026-04-26"
+        "2026-04-26",
+        "2026-04-28"
       ],
       "origin": "https://techcrunch.com"
     },
@@ -397,7 +423,8 @@
         "2026-04-23",
         "2026-04-24",
         "2026-04-25",
-        "2026-04-27"
+        "2026-04-27",
+        "2026-04-28"
       ],
       "origin": "https://www.theregister.com"
     },
@@ -436,7 +463,8 @@
     "arXiv:cs.LG": {
       "dates": [
         "2026-04-23",
-        "2026-04-27"
+        "2026-04-27",
+        "2026-04-28"
       ],
       "origin": "https://arxiv.org"
     },
