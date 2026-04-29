@@ -1,9 +1,16 @@
 {
   "citations": {
+    "9to5Mac": {
+      "dates": [
+        "2026-04-29"
+      ],
+      "origin": "https://www.anthropic.com"
+    },
     "AI Alignment Forum": {
       "dates": [
         "2026-04-16",
-        "2026-04-18"
+        "2026-04-18",
+        "2026-04-29"
       ],
       "origin": "https://www.alignmentforum.org"
     },
@@ -25,12 +32,25 @@
       ],
       "origin": "https://www.amd.com"
     },
+    "AWS": {
+      "dates": [
+        "2026-04-29"
+      ],
+      "origin": "https://openai.com"
+    },
     "AWS Machine Learning Blog": {
       "dates": [
         "2026-04-21",
-        "2026-04-22"
+        "2026-04-22",
+        "2026-04-29"
       ],
-      "origin": "https://aws.amazon.com"
+      "origin": "https://blogs.nvidia.com"
+    },
+    "Adobe": {
+      "dates": [
+        "2026-04-29"
+      ],
+      "origin": "https://www.anthropic.com"
     },
     "Alibaba": {
       "dates": [
@@ -43,7 +63,8 @@
         "2026-04-18",
         "2026-04-24",
         "2026-04-25",
-        "2026-04-26"
+        "2026-04-26",
+        "2026-04-29"
       ],
       "origin": "https://www.anthropic.com"
     },
@@ -61,9 +82,16 @@
         "2026-04-23",
         "2026-04-24",
         "2026-04-25",
-        "2026-04-28"
+        "2026-04-28",
+        "2026-04-29"
       ],
-      "origin": "https://www.technologyreview.com"
+      "origin": "https://arstechnica.com"
+    },
+    "Axios": {
+      "dates": [
+        "2026-04-29"
+      ],
+      "origin": "https://techcrunch.com"
     },
     "BeyondMachines": {
       "dates": [
@@ -95,7 +123,8 @@
     },
     "CNBC": {
       "dates": [
-        "2026-04-26"
+        "2026-04-26",
+        "2026-04-29"
       ],
       "origin": "https://techcrunch.com"
     },
@@ -104,6 +133,12 @@
         "2026-04-28"
       ],
       "origin": "https://www.technologyreview.com"
+    },
+    "CertiK": {
+      "dates": [
+        "2026-04-29"
+      ],
+      "origin": "https://www.theregister.com"
     },
     "Cloudflare": {
       "dates": [
@@ -129,7 +164,8 @@
         "2026-04-21",
         "2026-04-22",
         "2026-04-23",
-        "2026-04-28"
+        "2026-04-28",
+        "2026-04-29"
       ],
       "origin": "https://thezvi.substack.com"
     },
@@ -141,9 +177,10 @@
     },
     "GitHub": {
       "dates": [
-        "2026-04-28"
+        "2026-04-28",
+        "2026-04-29"
       ],
-      "origin": "https://github.blog"
+      "origin": "https://github.com"
     },
     "Globe and Mail": {
       "dates": [
@@ -207,15 +244,17 @@
         "2026-04-17",
         "2026-04-22",
         "2026-04-23",
-        "2026-04-25"
+        "2026-04-25",
+        "2026-04-29"
       ],
-      "origin": "https://huggingface.co"
+      "origin": "https://blogs.nvidia.com"
     },
     "Hugging Face Daily Papers": {
       "dates": [
         "2026-04-21",
         "2026-04-23",
-        "2026-04-24"
+        "2026-04-24",
+        "2026-04-29"
       ],
       "origin": "https://arxiv.org"
     },
@@ -224,6 +263,12 @@
         "2026-04-16"
       ],
       "origin": ""
+    },
+    "Inc.": {
+      "dates": [
+        "2026-04-29"
+      ],
+      "origin": "https://techcrunch.com"
     },
     "IndexBox": {
       "dates": [
@@ -244,9 +289,10 @@
         "2026-04-19",
         "2026-04-23",
         "2026-04-26",
-        "2026-04-27"
+        "2026-04-27",
+        "2026-04-29"
       ],
-      "origin": "https://arkaung.github.io"
+      "origin": "https://github.com"
     },
     "MIT Technology Review": {
       "dates": [
@@ -273,9 +319,10 @@
     "NVIDIA": {
       "dates": [
         "2026-04-18",
-        "2026-04-23"
+        "2026-04-23",
+        "2026-04-29"
       ],
-      "origin": "https://huggingface.co"
+      "origin": "https://blogs.nvidia.com"
     },
     "NVIDIA Blog": {
       "dates": [
@@ -292,6 +339,12 @@
       ],
       "origin": "https://www.nature.com"
     },
+    "Neowin": {
+      "dates": [
+        "2026-04-29"
+      ],
+      "origin": "https://www.anthropic.com"
+    },
     "NewsBytesApp": {
       "dates": [
         "2026-04-26"
@@ -306,7 +359,8 @@
         "2026-04-24",
         "2026-04-25",
         "2026-04-27",
-        "2026-04-28"
+        "2026-04-28",
+        "2026-04-29"
       ],
       "origin": "https://openai.com"
     },
@@ -363,9 +417,16 @@
       "dates": [
         "2026-04-16",
         "2026-04-21",
-        "2026-04-27"
+        "2026-04-27",
+        "2026-04-29"
       ],
       "origin": "https://semiengineering.com"
+    },
+    "ServeTheHome": {
+      "dates": [
+        "2026-04-29"
+      ],
+      "origin": "https://www.theregister.com"
     },
     "Sifted": {
       "dates": [
@@ -392,11 +453,23 @@
       ],
       "origin": "https://openai.com"
     },
+    "Simon Willison's Weblog": {
+      "dates": [
+        "2026-04-29"
+      ],
+      "origin": "https://simonwillison.net"
+    },
     "Stanford HAI": {
       "dates": [
         "2026-04-22"
       ],
       "origin": "https://hai.stanford.edu"
+    },
+    "Stratechery": {
+      "dates": [
+        "2026-04-29"
+      ],
+      "origin": "https://openai.com"
     },
     "TechCrunch": {
       "dates": [
@@ -410,9 +483,16 @@
         "2026-04-24",
         "2026-04-25",
         "2026-04-26",
-        "2026-04-28"
+        "2026-04-28",
+        "2026-04-29"
       ],
       "origin": "https://techcrunch.com"
+    },
+    "Tenstorrent": {
+      "dates": [
+        "2026-04-29"
+      ],
+      "origin": "https://www.theregister.com"
     },
     "The Register": {
       "dates": [
@@ -424,7 +504,20 @@
         "2026-04-24",
         "2026-04-25",
         "2026-04-27",
-        "2026-04-28"
+        "2026-04-28",
+        "2026-04-29"
+      ],
+      "origin": "https://www.theregister.com"
+    },
+    "Tom's Hardware": {
+      "dates": [
+        "2026-04-29"
+      ],
+      "origin": "https://www.theregister.com"
+    },
+    "VirusTotal": {
+      "dates": [
+        "2026-04-29"
       ],
       "origin": "https://www.theregister.com"
     },
@@ -447,7 +540,8 @@
         "2026-04-22",
         "2026-04-24",
         "2026-04-25",
-        "2026-04-27"
+        "2026-04-27",
+        "2026-04-29"
       ],
       "origin": "https://arxiv.org"
     },
@@ -456,7 +550,8 @@
         "2026-04-21",
         "2026-04-23",
         "2026-04-24",
-        "2026-04-27"
+        "2026-04-27",
+        "2026-04-29"
       ],
       "origin": "https://arxiv.org"
     },
