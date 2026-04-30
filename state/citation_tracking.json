@@ -10,7 +10,8 @@
       "dates": [
         "2026-04-16",
         "2026-04-18",
-        "2026-04-29"
+        "2026-04-29",
+        "2026-04-30"
       ],
       "origin": "https://www.alignmentforum.org"
     },
@@ -42,9 +43,10 @@
       "dates": [
         "2026-04-21",
         "2026-04-22",
-        "2026-04-29"
+        "2026-04-29",
+        "2026-04-30"
       ],
-      "origin": "https://blogs.nvidia.com"
+      "origin": "https://aws.amazon.com"
     },
     "Adobe": {
       "dates": [
@@ -83,9 +85,10 @@
         "2026-04-24",
         "2026-04-25",
         "2026-04-28",
-        "2026-04-29"
+        "2026-04-29",
+        "2026-04-30"
       ],
-      "origin": "https://arstechnica.com"
+      "origin": "https://techcrunch.com"
     },
     "Axios": {
       "dates": [
@@ -169,11 +172,18 @@
       ],
       "origin": "https://thezvi.substack.com"
     },
+    "EvalEval Coalition": {
+      "dates": [
+        "2026-04-30"
+      ],
+      "origin": "https://huggingface.co"
+    },
     "Financial Times": {
       "dates": [
-        "2026-04-21"
+        "2026-04-21",
+        "2026-04-30"
       ],
-      "origin": ""
+      "origin": "https://techcrunch.com"
     },
     "GitHub": {
       "dates": [
@@ -190,9 +200,10 @@
     },
     "Google": {
       "dates": [
-        "2026-04-24"
+        "2026-04-24",
+        "2026-04-30"
       ],
-      "origin": "https://developers.googleblog.com"
+      "origin": "https://www.theregister.com"
     },
     "Google Chrome": {
       "dates": [
@@ -228,9 +239,10 @@
         "2026-04-25",
         "2026-04-26",
         "2026-04-27",
-        "2026-04-28"
+        "2026-04-28",
+        "2026-04-30"
       ],
-      "origin": "https://app.oravys.com"
+      "origin": "https://github.com"
     },
     "Hugging Face": {
       "dates": [
@@ -245,9 +257,10 @@
         "2026-04-22",
         "2026-04-23",
         "2026-04-25",
-        "2026-04-29"
+        "2026-04-29",
+        "2026-04-30"
       ],
-      "origin": "https://blogs.nvidia.com"
+      "origin": "https://huggingface.co"
     },
     "Hugging Face Daily Papers": {
       "dates": [
@@ -257,6 +270,12 @@
         "2026-04-29"
       ],
       "origin": "https://arxiv.org"
+    },
+    "IBM": {
+      "dates": [
+        "2026-04-30"
+      ],
+      "origin": "https://huggingface.co"
     },
     "IBM Research": {
       "dates": [
@@ -283,6 +302,12 @@
       ],
       "origin": "https://www.interconnects.ai"
     },
+    "LangChain": {
+      "dates": [
+        "2026-04-30"
+      ],
+      "origin": "https://langchain.com"
+    },
     "Lobsters": {
       "dates": [
         "2026-04-16",
@@ -290,9 +315,10 @@
         "2026-04-23",
         "2026-04-26",
         "2026-04-27",
-        "2026-04-29"
+        "2026-04-29",
+        "2026-04-30"
       ],
-      "origin": "https://github.com"
+      "origin": "https://openai.com"
     },
     "MIT Technology Review": {
       "dates": [
@@ -360,7 +386,8 @@
         "2026-04-25",
         "2026-04-27",
         "2026-04-28",
-        "2026-04-29"
+        "2026-04-29",
+        "2026-04-30"
       ],
       "origin": "https://openai.com"
     },
@@ -393,6 +420,12 @@
         "2026-04-16"
       ],
       "origin": "https://www.pwc.com"
+    },
+    "PyTorch Blog": {
+      "dates": [
+        "2026-04-30"
+      ],
+      "origin": "https://pytorch.org"
     },
     "Qwen": {
       "dates": [
@@ -455,7 +488,8 @@
     },
     "Simon Willison's Weblog": {
       "dates": [
-        "2026-04-29"
+        "2026-04-29",
+        "2026-04-30"
       ],
       "origin": "https://simonwillison.net"
     },
@@ -484,7 +518,8 @@
         "2026-04-25",
         "2026-04-26",
         "2026-04-28",
-        "2026-04-29"
+        "2026-04-29",
+        "2026-04-30"
       ],
       "origin": "https://techcrunch.com"
     },
@@ -505,7 +540,8 @@
         "2026-04-25",
         "2026-04-27",
         "2026-04-28",
-        "2026-04-29"
+        "2026-04-29",
+        "2026-04-30"
       ],
       "origin": "https://www.theregister.com"
     },
@@ -520,6 +556,12 @@
         "2026-04-29"
       ],
       "origin": "https://www.theregister.com"
+    },
+    "Wall Street Journal": {
+      "dates": [
+        "2026-04-30"
+      ],
+      "origin": "https://techcrunch.com"
     },
     "Zed": {
       "dates": [
@@ -541,7 +583,8 @@
         "2026-04-24",
         "2026-04-25",
         "2026-04-27",
-        "2026-04-29"
+        "2026-04-29",
+        "2026-04-30"
       ],
       "origin": "https://arxiv.org"
     },
@@ -551,7 +594,8 @@
         "2026-04-23",
         "2026-04-24",
         "2026-04-27",
-        "2026-04-29"
+        "2026-04-29",
+        "2026-04-30"
       ],
       "origin": "https://arxiv.org"
     },
@@ -560,6 +604,12 @@
         "2026-04-23",
         "2026-04-27",
         "2026-04-28"
+      ],
+      "origin": "https://arxiv.org"
+    },
+    "arXiv:cs.SE": {
+      "dates": [
+        "2026-04-30"
       ],
       "origin": "https://arxiv.org"
     },
