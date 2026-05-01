@@ -60,6 +60,12 @@
       ],
       "origin": "https://huggingface.co"
     },
+    "Andrej Karpathy": {
+      "dates": [
+        "2026-05-01"
+      ],
+      "origin": "https://karpathy.bearblog.dev"
+    },
     "Anthropic": {
       "dates": [
         "2026-04-18",
@@ -86,7 +92,8 @@
         "2026-04-25",
         "2026-04-28",
         "2026-04-29",
-        "2026-04-30"
+        "2026-04-30",
+        "2026-05-01"
       ],
       "origin": "https://techcrunch.com"
     },
@@ -149,6 +156,12 @@
       ],
       "origin": "https://blog.cloudflare.com"
     },
+    "Counterpoint Research": {
+      "dates": [
+        "2026-05-01"
+      ],
+      "origin": "https://www.theregister.com"
+    },
     "Cybersecurity News": {
       "dates": [
         "2026-04-26"
@@ -198,12 +211,19 @@
       ],
       "origin": "https://techcrunch.com"
     },
+    "Goodfire": {
+      "dates": [
+        "2026-05-01"
+      ],
+      "origin": "https://www.technologyreview.com"
+    },
     "Google": {
       "dates": [
         "2026-04-24",
-        "2026-04-30"
+        "2026-04-30",
+        "2026-05-01"
       ],
-      "origin": "https://www.theregister.com"
+      "origin": "https://techcrunch.com"
     },
     "Google Chrome": {
       "dates": [
@@ -214,7 +234,8 @@
     "Google DeepMind": {
       "dates": [
         "2026-04-16",
-        "2026-04-27"
+        "2026-04-27",
+        "2026-05-01"
       ],
       "origin": "https://deepmind.google"
     },
@@ -240,9 +261,10 @@
         "2026-04-26",
         "2026-04-27",
         "2026-04-28",
-        "2026-04-30"
+        "2026-04-30",
+        "2026-05-01"
       ],
-      "origin": "https://github.com"
+      "origin": "https://semgrep.dev"
     },
     "Hugging Face": {
       "dates": [
@@ -267,7 +289,8 @@
         "2026-04-21",
         "2026-04-23",
         "2026-04-24",
-        "2026-04-29"
+        "2026-04-29",
+        "2026-05-01"
       ],
       "origin": "https://arxiv.org"
     },
@@ -308,6 +331,12 @@
       ],
       "origin": "https://langchain.com"
     },
+    "LightSeek Foundation": {
+      "dates": [
+        "2026-05-01"
+      ],
+      "origin": "https://pytorch.org"
+    },
     "Lobsters": {
       "dates": [
         "2026-04-16",
@@ -326,7 +355,8 @@
         "2026-04-20",
         "2026-04-24",
         "2026-04-25",
-        "2026-04-28"
+        "2026-04-28",
+        "2026-05-01"
       ],
       "origin": "https://www.technologyreview.com"
     },
@@ -335,6 +365,12 @@
         "2026-04-21"
       ],
       "origin": "https://www.kimi.com"
+    },
+    "Mozilla": {
+      "dates": [
+        "2026-05-01"
+      ],
+      "origin": "https://www.theregister.com"
     },
     "NIST": {
       "dates": [
@@ -346,7 +382,8 @@
       "dates": [
         "2026-04-18",
         "2026-04-23",
-        "2026-04-29"
+        "2026-04-29",
+        "2026-05-01"
       ],
       "origin": "https://blogs.nvidia.com"
     },
@@ -387,9 +424,10 @@
         "2026-04-27",
         "2026-04-28",
         "2026-04-29",
-        "2026-04-30"
+        "2026-04-30",
+        "2026-05-01"
       ],
-      "origin": "https://openai.com"
+      "origin": "https://simonwillison.net"
     },
     "OpenClaw": {
       "dates": [
@@ -423,7 +461,8 @@
     },
     "PyTorch Blog": {
       "dates": [
-        "2026-04-30"
+        "2026-04-30",
+        "2026-05-01"
       ],
       "origin": "https://pytorch.org"
     },
@@ -446,12 +485,19 @@
       ],
       "origin": "https://www.scientificamerican.com"
     },
+    "Semgrep": {
+      "dates": [
+        "2026-05-01"
+      ],
+      "origin": "https://semgrep.dev"
+    },
     "Semiconductor Engineering": {
       "dates": [
         "2026-04-16",
         "2026-04-21",
         "2026-04-27",
-        "2026-04-29"
+        "2026-04-29",
+        "2026-05-01"
       ],
       "origin": "https://semiengineering.com"
     },
@@ -489,7 +535,8 @@
     "Simon Willison's Weblog": {
       "dates": [
         "2026-04-29",
-        "2026-04-30"
+        "2026-04-30",
+        "2026-05-01"
       ],
       "origin": "https://simonwillison.net"
     },
@@ -505,6 +552,12 @@
       ],
       "origin": "https://openai.com"
     },
+    "Stripe": {
+      "dates": [
+        "2026-05-01"
+      ],
+      "origin": "https://techcrunch.com"
+    },
     "TechCrunch": {
       "dates": [
         "2026-04-16",
@@ -519,7 +572,8 @@
         "2026-04-26",
         "2026-04-28",
         "2026-04-29",
-        "2026-04-30"
+        "2026-04-30",
+        "2026-05-01"
       ],
       "origin": "https://techcrunch.com"
     },
@@ -541,7 +595,8 @@
         "2026-04-27",
         "2026-04-28",
         "2026-04-29",
-        "2026-04-30"
+        "2026-04-30",
+        "2026-05-01"
       ],
       "origin": "https://www.theregister.com"
     },
@@ -550,6 +605,12 @@
         "2026-04-29"
       ],
       "origin": "https://www.theregister.com"
+    },
+    "UK AI Security Institute": {
+      "dates": [
+        "2026-05-01"
+      ],
+      "origin": "https://www.aisi.gov.uk"
     },
     "VirusTotal": {
       "dates": [
@@ -584,7 +645,8 @@
         "2026-04-25",
         "2026-04-27",
         "2026-04-29",
-        "2026-04-30"
+        "2026-04-30",
+        "2026-05-01"
       ],
       "origin": "https://arxiv.org"
     },
